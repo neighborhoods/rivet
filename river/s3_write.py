@@ -1,7 +1,7 @@
 import os
 from tempfile import NamedTemporaryFile
 
-import os
+import boto3
 
 from river import s3_path_utils
 from river.storage_formats import get_storage_fn

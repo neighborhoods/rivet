@@ -5,7 +5,7 @@ from .s3_write import write
 from .storage_formats import format_fn_map
 
 
-supported_formats = format_fn_map.keys()
+supported_formats = list(format_fn_map.keys())
 
 
 __all__ = [

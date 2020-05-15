@@ -1,9 +1,12 @@
+import os
 import re
 
 import boto3
 
 
-def list_objects(bucket, folder='', include_folder=False, recursive=False):
+def list_objects(bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
+                                  'nhds-data-lake-experimental-zone'),
+                 folder='', include_folder=False, recursive=False):
     s3 = boto3.client('s3')
 
     keys = [obj['Key'] for obj in
