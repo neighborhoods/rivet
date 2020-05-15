@@ -68,6 +68,7 @@ setup(
     license=about['__license__'],
     packages=find_packages(),
     install_requires=[
-        'boto3>=1.13.11'
+        'boto3>=1.10.0'
+        'pandas>=1.0.0'
     ]
  )

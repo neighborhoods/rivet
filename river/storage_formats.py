@@ -1,4 +1,5 @@
-import dill
+import pickle
+import os
 import pandas as pd
 
 
@@ -51,11 +52,13 @@ csv = {
 
 
 def _read_pickle(tmpfile, *args, **kwargs):
-    obj = dill.load(tmpfile, *args, **kwargs)
+    print(os.system('ls -l ' + tmpfile.name))
+    obj = pickle.load(tmpfile)
     return obj
 
 
-def _write_pickle(obj, tmpfile, *args, **kwargs):
+def _write_pickle(obj, tmpfile, protocol=pickle.HIGHEST_PROTOCOL,
+                  *args, **kwargs):
     """
     Pickles an object and uploads it to S3
 
@@ -64,7 +67,8 @@ def _write_pickle(obj, tmpfile, *args, **kwargs):
         path (str): The full path (other than bucket) to the object in S3
         bucket (str): The S3 bucket to save 'obj' in
     """
-    dill.dump(obj, tmpfile)
+    pickle.dump(obj, tmpfile, protocol=protocol, *args, **kwargs)
+    # Otherwise, file won't be populated until after 'tmpfile' closes
     tmpfile.flush()
 
 
@@ -108,6 +112,13 @@ pq = {
     'read': _read_parquet,
     'write': _write_parquet
 }
+
+##############################################################################
+
+# TODO
+########
+# AVRO #
+########
 
 ##############################################################################
 
