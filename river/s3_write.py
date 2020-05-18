@@ -7,8 +7,7 @@ from river import s3_path_utils
 from river.storage_formats import get_storage_fn
 
 
-def write(obj, filename, folder='',
-          bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
           *args, **kwargs):
     """
     Writes an object to a specified file format and uploads it to S3.
@@ -17,19 +16,15 @@ def write(obj, filename, folder='',
 
     Args:
         obj (object): The object to be uploaded to S3
-        filename (str): The filename to save 'obj' as
-        folder (str, optional): The folder/prefix to save 'obj' under
+        filename (str): The path to save obj to
         bucket (str, optional): The S3 bucket to save 'obj' in
     Returns:
         str: The full path to the object in S3, without the 's3://' prefix
     """
-    filetype = s3_path_utils.get_filetype(filename)
+    filetype = s3_path_utils.get_filetype(path)
     write_fn = get_storage_fn(filetype, 'write')
 
-    if folder and not folder.endswith('/'):
-        folder += '/'
-
-    path = s3_path_utils.clean_path(folder, filename)
+    path = s3_path_utils.clean_path(path)
     bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')

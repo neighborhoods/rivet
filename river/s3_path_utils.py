@@ -21,7 +21,7 @@ def clean_folder(folder):
     return folder
 
 
-def clean_path(folder, filename):
+def clean_path(path):
     """
     Creates and cleans an S3 path based on a provided folder and filename.
 
@@ -33,14 +33,14 @@ def clean_path(folder, filename):
     Raises:
         ValueError: If good path writing conventions are not followed
     """
-    folder = clean_folder(folder)
-
-    path = folder + filename
-
     if '//' in path:
         raise ValueError('Double-forward slashes (\'//\') are not permitted '
                          'by river. Use \'river.read_badpractice_file\' '
                          'if reading such a file is necessary.')
+
+    if path.find('.') < path.rfind('/'):
+        raise ValueError('Period characters (\'.\') are not permitted '
+                         ' by river except in file extensions.')
     return path
 
 

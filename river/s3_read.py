@@ -8,8 +8,7 @@ from river import s3_path_utils
 from river.storage_formats import get_storage_fn
 
 
-def read(filename, folder='',
-         bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
          *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session.
@@ -23,13 +22,10 @@ def read(filename, folder='',
     Returns:
         object: The object downloaded from S3
     """
-    filetype = s3_path_utils.get_filetype(filename)
+    filetype = s3_path_utils.get_filetype(path)
     read_fn = get_storage_fn(filetype, 'read')
 
-    if folder and not folder.endswith('/'):
-        folder += '/'
-
-    path = s3_path_utils.clean_path(folder, filename)
+    path = s3_path_utils.clean_path(path)
     bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')
@@ -39,9 +35,7 @@ def read(filename, folder='',
     return obj
 
 
-def read_badpractice(filename, folder='',
-                     bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
-                                      'nhds-data-lake-experimental-zone'),
+def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
                      filetype=None, *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session,
@@ -68,11 +62,9 @@ def read_badpractice(filename, folder='',
                     'followed.')
 
     if filetype is None:
-        filetype = s3_path_utils.get_filetype(filename)
+        filetype = s3_path_utils.get_filetype(path)
 
     read_fn = get_storage_fn(filetype, 'read')
-
-    path = folder + filename
 
     s3 = boto3.client('s3')
     with NamedTemporaryFile() as tmpfile:

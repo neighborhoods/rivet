@@ -5,9 +5,8 @@ import boto3
 from river import s3_path_utils
 
 
-def copy(source_filename, source_folder='',
+def copy(source_path, dest_path,
          source_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-         dest_filename=None, dest_folder='',
          dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
     """
     Copy an object from one S3 location into another.
@@ -21,11 +20,9 @@ def copy(source_filename, source_folder='',
         dest_folder (str): Folder to copy to
         dest_bucket (str): Bucket to copy to
     """
-    if dest_filename is None:
-        dest_filename = source_filename
+    source_path = s3_path_utils.clean_path(source_path)
+    dest_path = s3_path_utils.clean_path(dest_path)
 
-    source_path = s3_path_utils.clean_path(source_folder, source_filename)
-    dest_path = s3_path_utils.clean_path(dest_folder, dest_filename)
     s3 = boto3.client('s3')
 
     copy_source = {
