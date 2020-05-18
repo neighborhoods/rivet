@@ -3,6 +3,8 @@ import re
 
 import boto3
 
+from river import s3_path_utils
+
 
 def list_objects(bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
                                   'nhds-data-lake-experimental-zone'),
@@ -20,12 +22,10 @@ def list_objects(bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
         list<str>: List of S3 paths
     """
     s3 = boto3.client('s3')
+    folder = s3_path_utils.clean_folder(folder)
 
     keys = [obj['Key'] for obj in
             s3.list_objects_v2(Bucket=bucket, Prefix=folder)['Contents']]
-
-    if folder and not folder.endswith('/'):
-        folder += '/'
 
     if not recursive:
         keys = list(

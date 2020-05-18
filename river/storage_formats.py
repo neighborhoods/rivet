@@ -82,8 +82,10 @@ def _read_pickle(tmpfile, *args, **kwargs):
     Returns:
         object: The unpickled object
     """
-    print(os.system('ls -l ' + tmpfile.name))
-    obj = pickle.load(tmpfile, *args, **kwargs)
+    # Pickle reading from a tempfile if it hasn't been closed post-writing
+    # raises an 'EOFError', so we have to create a secondary opening.
+    with open(tmpfile.name, 'rb') as f:
+        obj = pickle.load(f, *args, **kwargs)
     return obj
 
 

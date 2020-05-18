@@ -14,6 +14,13 @@ def get_filetype(filename):
     return filetype
 
 
+def clean_folder(folder):
+    if folder and not folder.endswith('/'):
+        folder += '/'
+
+    return folder
+
+
 def clean_path(folder, filename):
     """
     Creates and cleans an S3 path based on a provided folder and filename.
@@ -26,8 +33,8 @@ def clean_path(folder, filename):
     Raises:
         ValueError: If good path writing conventions are not followed
     """
-    if folder and not folder.endswith('/'):
-        folder += '/'
+    folder = clean_folder(folder)
+
     path = folder + filename
 
     if '//' in path:
