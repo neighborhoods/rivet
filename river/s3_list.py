@@ -6,9 +6,9 @@ import boto3
 from river import s3_path_utils
 
 
-def list_objects(bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
-                                  'nhds-data-lake-experimental-zone'),
-                 folder='', include_folder=False, recursive=False):
+def list_objects(folder='',
+                 bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+                 include_folder=False, recursive=False):
     """
     Lists objects in an S3 bucket.
 

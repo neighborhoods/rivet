@@ -6,11 +6,9 @@ from river import s3_path_utils
 
 
 def copy(source_filename, source_folder='',
-         source_bucket=os.getenv(
-             'RV_DEFAULT_S3_BUCKET', 'nhds-data-lake-experimental-zone'),
+         source_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
          dest_filename=None, dest_folder='',
-         dest_bucket=os.getenv(
-             'RV_DEFAULT_S3_BUCKET', 'nhds-data-lake-experimental-zone')):
+         dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
     """
     Copy an object from one S3 location into another.
 

@@ -9,8 +9,7 @@ from river.storage_formats import get_storage_fn
 
 
 def read(filename, folder='',
-         bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
-                          'nhds-data-lake-experimental-zone'),
+         bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
          *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session.

@@ -8,8 +8,7 @@ from river.storage_formats import get_storage_fn
 
 
 def write(obj, filename, folder='',
-          bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
-                           'nhds-data-lake-experimental-zone'),
+          bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
           *args, **kwargs):
     """
     Writes an object to a specified file format and uploads it to S3.
