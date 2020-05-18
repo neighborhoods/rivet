@@ -4,6 +4,15 @@ import pandas as pd
 
 
 def get_storage_fn(filetype, rw):
+    """
+    Gets the appropriate storage function based on filetype and read/write
+
+    Args:
+        filetype (str): The storage type of the file being written/read
+        rw (str): Whether the file is being read or written
+    Returns:
+        function: The storage function needed for reading/writing the filetype
+    """
     if filetype not in format_fn_map.keys():
         raise ValueError('Storage type \'{storage_type}\' not supported.')
     return format_fn_map[filetype][rw]
@@ -16,18 +25,30 @@ def get_storage_fn(filetype, rw):
 
 
 def _read_csv(tmpfile, *args, **kwargs):
-    obj = pd.read_csv(tmpfile.name)
+    """
+    Reads a DataFrame from a CSV
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from CSV
+    """
+    obj = pd.read_csv(tmpfile.name, *args, **kwargs)
     return obj
 
 
 def _write_csv(obj, tmpfile, index=False, *args, **kwargs):
     """
-    Saves a DataFrame to a CSV and uploads it to S3
+    Saves a DataFrame to a CSV with modifiable default values
 
     Args:
-        obj (pd.DataFrame): The DataFrame to be uploaded
-        path (str): The full path (other than bucket) to the object in S3
-        bucket (str): The S3 bucket to save 'obj' in
+        obj (pd.DataFrame): The DataFrame to be written to CSV
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+        index (bool, default=False): Whether to include the DataFrame index
+            in the CSV, used to establish default behavior.
+            Can be overridden in args/kwargs.
 
     Raises:
         TypeError: if 'obj' is not a DataFrame
@@ -52,20 +73,32 @@ csv = {
 
 
 def _read_pickle(tmpfile, *args, **kwargs):
+    """
+    Reads a pickled object
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        object: The unpickled object
+    """
     print(os.system('ls -l ' + tmpfile.name))
-    obj = pickle.load(tmpfile)
+    obj = pickle.load(tmpfile, *args, **kwargs)
     return obj
 
 
 def _write_pickle(obj, tmpfile, protocol=pickle.HIGHEST_PROTOCOL,
                   *args, **kwargs):
     """
-    Pickles an object and uploads it to S3
+    Pickles an object with modifiable default values
 
     Args:
-        obj (object): The object to be pickled and uploaded
-        path (str): The full path (other than bucket) to the object in S3
-        bucket (str): The S3 bucket to save 'obj' in
+        obj (pd.DataFrame): The object to be pickled
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+        protocol (bool, default=pickle.HIGHEST_PROTOCOL):
+            Pickling protocol to use. Can be overridden in args/kwargs.
+
     """
     pickle.dump(obj, tmpfile, protocol=protocol, *args, **kwargs)
     # Otherwise, file won't be populated until after 'tmpfile' closes
@@ -85,18 +118,30 @@ pkl = {
 
 
 def _read_parquet(tmpfile, *args, **kwargs):
+    """
+    Reads a DataFrame from a Parquet file
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from CSV
+    """
     obj = pd.read_parquet(tmpfile.name, *args, **kwargs)
     return obj
 
 
 def _write_parquet(obj, tmpfile, index=False, *args, **kwargs):
     """
-    Saves a DataFrame to Parquet format and uploads it to S3
+    Saves a DataFrame to Parquet format
 
     Args:
-        obj (pd.DataFrame): The DataFrame to be uploaded
-        path (str): The full path (other than bucket) to the object in S3
-        bucket (str): The S3 bucket to save 'obj' in
+        obj (pd.DataFrame): The DataFrame to be written to Parquet
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+        index (bool, default=False): Whether to include the DataFrame index
+            in the Parquet file, used to establish default behavior.
+            Can be overridden in args/kwargs.
 
     Raises:
         TypeError: if 'obj' is not a DataFrame

@@ -12,7 +12,9 @@ def write(obj, filename, folder='',
                            'nhds-data-lake-experimental-zone'),
           *args, **kwargs):
     """
-    Uploads an object to S3, in a storage format decided by its file extension
+    Writes an object to a specified file format and uploads it to S3.
+    Storage format is determined by file extension, to prevent
+    extension-less files in S3.
 
     Args:
         obj (object): The object to be uploaded to S3

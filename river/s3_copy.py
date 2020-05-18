@@ -11,6 +11,18 @@ def copy(source_filename, source_folder='',
          dest_filename=None, dest_folder='',
          dest_bucket=os.getenv(
              'RV_DEFAULT_S3_BUCKET', 'nhds-data-lake-experimental-zone')):
+    """
+    Copy an object from one S3 location into another.
+
+    Args:
+        source_filename (str): Filename of file to copy
+        source_folder (str): Folder of file to copy
+        source_bucket (str): Bucket of file to copy
+        dest_filename (str): Filename to copy to.
+            Will be set to 'source_filename' if not provided
+        dest_folder (str): Folder to copy to
+        dest_bucket (str): Bucket to copy to
+    """
     if dest_filename is None:
         dest_filename = source_filename
 

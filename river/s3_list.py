@@ -7,6 +7,18 @@ import boto3
 def list_objects(bucket=os.getenv('RV_DEFAULT_S3_BUCKET',
                                   'nhds-data-lake-experimental-zone'),
                  folder='', include_folder=False, recursive=False):
+    """
+    Lists objects in an S3 bucket.
+
+    Args:
+        bucket (str): The bucket to list files from
+        folder (str, optional): The folder to look in
+        include_folder (bool):
+            Whether to include the folder in the returned S3 paths
+        recursive (bool): Whether to list contents of nested folders
+    Returns:
+        list<str>: List of S3 paths
+    """
     s3 = boto3.client('s3')
 
     keys = [obj['Key'] for obj in
