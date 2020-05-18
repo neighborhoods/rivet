@@ -1,4 +1,5 @@
 import os
+import re
 
 
 def get_filetype(filename):
@@ -31,12 +32,15 @@ def clean_path(path):
     Returns:
         str: The full, cleaned S3 path
     Raises:
-        ValueError: If good path writing conventions are not followed
+        ValueError: If 'path' violates river's S3 path conventions
     """
     if '//' in path:
         raise ValueError('Double-forward slashes (\'//\') are not permitted '
                          'by river. Use \'river.read_badpractice_file\' '
                          'if reading such a file is necessary.')
+
+    if re.search(r'\.\.', path):
+        raise ValueError('Double-dots (\'..\') are not permitted by river.')
 
     if path.find('.') < path.rfind('/'):
         raise ValueError('Period characters (\'.\') are not permitted '
