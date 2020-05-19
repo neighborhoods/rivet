@@ -12,6 +12,11 @@ def get_filetype(filename):
         str: The filetype of the file
     """
     filetype = os.path.splitext(filename)[-1][1:].lower()
+    if filetype == '':
+        raise ValueError('S3 path must contain an extension designating '
+                         'a valid file type. If you are reading a file, '
+                         'that does not have an extension, you can use '
+                         '\'rv.read_badpractice\'.')
     return filetype
 
 
