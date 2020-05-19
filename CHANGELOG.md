@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Hotfix: `*kwargs` changed to `**kwargs` in `s3_write`
 - Hotfix: Error string formatting in `get_storage_fn`
 
-## [0.1] - 2020-05-15
+## [0.1.0] - 2020-05-15
 
 ### Added
 - Ability to read files from S3
