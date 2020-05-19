@@ -65,7 +65,6 @@ setup(
     description=about['__description__'],
     long_description=long_description,
     long_description_content_type='text/markdown',
-    license=about['__license__'],
     packages=find_packages(),
     install_requires=[
         'boto3>=1.10.0'
