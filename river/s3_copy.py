@@ -5,7 +5,8 @@ import boto3
 from river import s3_path_utils
 
 
-def copy(source_path, dest_path,
+def copy(source_path,
+         dest_path,
          source_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
          dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
     """
