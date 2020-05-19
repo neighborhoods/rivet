@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2020-05-19
+
+### Added
+- Specific error for S3 paths that do not include file extensions
+
+### Changed
+- Hotfix: `*kwargs` changed to `**kwargs` in `s3_write`
+- Hotfix: Error string formatting in `get_storage_fn`
+
 ## [0.1.0] - 2020-05-15
 
 ### Added
