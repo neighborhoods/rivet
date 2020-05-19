@@ -13,7 +13,10 @@ def get_storage_fn(filetype, rw):
         function: The storage function needed for reading/writing the filetype
     """
     if filetype not in format_fn_map.keys():
-        raise ValueError('Storage type \'{storage_type}\' not supported.')
+        raise ValueError(
+            'Storage type \'{filetype}\' not supported.'.format(
+                filetype=filetype)
+        )
     return format_fn_map[filetype][rw]
 
 ###############################################################################

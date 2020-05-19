@@ -29,7 +29,7 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
 
     s3 = boto3.client('s3')
     with NamedTemporaryFile() as tmpfile:
-        write_fn(obj, tmpfile, *args, *kwargs)
+        write_fn(obj, tmpfile, *args, **kwargs)
         s3.upload_file(tmpfile.name, bucket, path)
 
     return '/'.join([bucket, path])
