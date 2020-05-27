@@ -67,7 +67,7 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
-        'boto3>=1.10.0'
+        'boto3>=1.10.0',
         'pandas>=1.0.0'
     ],
     cmdclass={
