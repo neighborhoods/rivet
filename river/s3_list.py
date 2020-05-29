@@ -38,6 +38,16 @@ def list_objects(folder='',
 
 
 def exists(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
+    """
+    Checks if an object exists at a specific S3 key
+
+    Args:
+        path (str): S3 path to check for object existence at
+        bucket (str): S3 bucket to check in
+
+    Returns:
+        bool: Whether an object exists at the specified key
+    """
     matches = list_objects(folder=path.rsplit('/', 1)[0],
                            bucket=bucket,
                            include_folder=True)
