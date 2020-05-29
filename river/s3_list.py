@@ -35,3 +35,12 @@ def list_objects(folder='',
         keys = [key[len(folder):] for key in keys]
 
     return keys
+
+
+def exists(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
+    matches = list_objects(folder=path.rsplit('/', 1)[0],
+                           bucket=bucket,
+                           include_folder=True)
+    if path in matches:
+        return True
+    return False
