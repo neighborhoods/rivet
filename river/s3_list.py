@@ -3,36 +3,36 @@ import re
 
 import boto3
 
-from river import s3_path_utils
 
-
-def list_objects(folder='',
+def list_objects(path='',
                  bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-                 include_folder=False, recursive=False):
+                 include_prefix=False, recursive=False):
     """
     Lists objects in an S3 bucket.
 
     Args:
         bucket (str): The bucket to list files from
-        folder (str, optional): The folder to look in
-        include_folder (bool):
-            Whether to include the folder in the returned S3 paths
+        path (str, optional): The path to look in
+        include_prefix (bool):
+            Whether to include the objects' prefixes in the returned S3 paths
         recursive (bool): Whether to list contents of nested folders
     Returns:
         list<str>: List of S3 paths
     """
     s3 = boto3.client('s3')
-    folder = s3_path_utils.clean_folder(folder)
 
-    keys = [obj['Key'] for obj in
-            s3.list_objects_v2(Bucket=bucket, Prefix=folder)['Contents']]
+    response = s3.list_objects_v2(Bucket=bucket, Prefix=path)
+    if 'Contents' in response:
+        keys = [obj['Key'] for obj in response['Contents']]
+    else:
+        keys = []
 
     if not recursive:
         keys = list(
-            {re.match(folder + r'[\w. ]*/?', key).group() for key in keys}
+            {re.match(path + r'[\w. ]*/?', key).group() for key in keys}
         )
-    if not include_folder:
-        keys = [key[len(folder):] for key in keys]
+    if '/' in path and not include_prefix:
+        keys = [key[path.rfind('/') + 1:] for key in keys]
 
     return keys
 
@@ -48,9 +48,9 @@ def exists(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
     Returns:
         bool: Whether an object exists at the specified key
     """
-    matches = list_objects(folder=path.rsplit('/', 1)[0],
+    matches = list_objects(path=path,
                            bucket=bucket,
-                           include_folder=True)
+                           include_prefix=True)
     if path in matches:
         return True
     return False
