@@ -34,7 +34,7 @@ def list_objects(path='',
     if '/' in path and not include_prefix:
         keys = [key[path.rfind('/') + 1:] for key in keys]
 
-    return keys
+    return sorted(keys)
 
 
 def exists(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):

@@ -7,6 +7,7 @@ verify_ssl = true
 flake8 = "==3.7.9"
 pipenv-devcheck = "==0.2.5"
 pytest = "==5.3.2"
+moto = "*"
 
 [packages]
 boto3 = "==1.13.11"
