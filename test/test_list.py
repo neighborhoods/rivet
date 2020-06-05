@@ -3,11 +3,10 @@ from river import list_objects, exists
 
 def test_list_objects_w_objects(setup_bucket_w_contents,
                                 test_bucket, test_keys):
-    keys_wo_prefix = sorted(list(
-        {key if '/' not in key else key[:key.find('/') + 1]
-         for key in test_keys}))
+    keys_wo_prefix = list({key if '/' not in key else key[:key.find('/') + 1]
+                           for key in test_keys})
     objects = list_objects(bucket=test_bucket)
-    assert objects == keys_wo_prefix
+    assert objects == sorted(keys_wo_prefix)
 
 
 def test_list_objects_wo_objects(setup_bucket_wo_contents,
@@ -18,13 +17,7 @@ def test_list_objects_wo_objects(setup_bucket_wo_contents,
 
 def test_list_objects_include_prefix(setup_bucket_w_contents,
                                      test_bucket, test_keys):
-    prefix = None
-    idx = 0
-    while prefix is None:
-        current_key = test_keys[idx]
-        if current_key.count('/') > 1:
-            prefix = current_key.rsplit('/', 2)[0] + '/'
-        idx += 1
+    prefix = get_prefixes_w_nested_folders(test_keys)
 
     keys_w_prefix = []
     for key in test_keys:
@@ -37,17 +30,29 @@ def test_list_objects_include_prefix(setup_bucket_w_contents,
     objects = list_objects(path=prefix, bucket=test_bucket,
                            include_prefix=True)
 
-    assert objects == keys_w_prefix
+    assert objects == sorted(keys_w_prefix)
 
 
 def test_list_objects_recursive(setup_bucket_w_contents,
                                 test_bucket, test_keys):
-    pass
+    prefix = get_prefixes_w_nested_folders(test_keys)
+
+    recursive_keys = [key[len(prefix):] for key in test_keys
+                      if key.startswith(prefix)]
+    objects = list_objects(path=prefix, bucket=test_bucket,
+                           recursive=True)
+    assert objects == sorted(recursive_keys)
 
 
 def test_list_objects_include_prefix_and_recursive(setup_bucket_w_contents,
                                                    test_bucket, test_keys):
-    pass
+    prefix = get_prefixes_w_nested_folders(test_keys)
+    recursive_keys_w_prefix = [key for key in test_keys
+                               if key.startswith(prefix)]
+
+    objects = list_objects(path=prefix, bucket=test_bucket,
+                           include_prefix=True, recursive=True)
+    assert objects == sorted(recursive_keys_w_prefix)
 
 
 def test_exists_w_object_present(setup_bucket_w_contents,
@@ -60,8 +65,14 @@ def test_exists_wo_object_present(setup_bucket_wo_contents,
     assert not exists(test_keys[0], test_bucket)
 
 
-def test_exists_wo_only_exact_match(setup_bucket_w_contents,
-                                    test_bucket, test_keys):
+def test_exists_only_exact_match(setup_bucket_w_contents,
+                                 test_bucket, test_keys):
     key = test_keys[0]
     partial_key = key[:len(key) - 1]
     assert not exists(partial_key[0], test_bucket)
+
+
+def get_prefixes_w_nested_folders(test_keys):
+    for key in test_keys:
+        if key.count('/') > 1:
+            return key.rsplit('/', 2)[0] + '/'
