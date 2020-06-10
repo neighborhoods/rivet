@@ -9,9 +9,7 @@ from river import write
 
 def test_write_csv(setup_bucket_wo_contents, test_bucket,
                    test_df, test_df_keys):
-    """
-    Tests that writing files stored as as CSV works properly
-    """
+    """Tests that writing files stored as as CSV works properly"""
     s3 = boto3.client('s3')
 
     for key in test_df_keys['csv']:
@@ -24,9 +22,7 @@ def test_write_csv(setup_bucket_wo_contents, test_bucket,
 
 
 def test_write_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
-    """
-    Tests that writing pickled files works properly
-    """
+    """Tests that writing pickled files works properly"""
     s3 = boto3.client('s3')
 
     for key in test_df_keys['pkl']:
@@ -42,9 +38,7 @@ def test_write_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
 
 
 def test_write_pq(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
-    """
-    Tests that writing files stored as as Parquet works properly
-    """
+    """Tests that writing files stored as as Parquet works properly"""
     s3 = boto3.client('s3')
 
     for key in test_df_keys['pq']:

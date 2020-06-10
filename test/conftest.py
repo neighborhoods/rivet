@@ -23,13 +23,13 @@ def aws_credentials():
 
 @pytest.fixture
 def test_bucket():
-    """ Universal bucket name for use throughout testing """
+    """Universal bucket name for use throughout testing"""
     return 'test_bucket'
 
 
 @pytest.fixture
 def test_keys():
-    """ List of keys to be used for populating a bucket with empty objects """
+    """List of keys to be used for populating a bucket with empty objects"""
     return sorted([
         'test_key_0.csv',
         'folder0/test_key_1.pq',
@@ -41,7 +41,7 @@ def test_keys():
 
 @pytest.fixture
 def test_df_keys():
-    """ List of keys to be used for populating a bucket with DataFrames """
+    """List of keys to be used for populating a bucket with DataFrames"""
     return {
         'csv': ['df.csv'],
         'pkl': ['df.pkl', 'df.pickle'],
@@ -64,7 +64,7 @@ def test_df():
 
 @pytest.fixture
 def mock_s3_client():
-    """ Mocks all s3 connections in any test or fixture that includes it """
+    """Mocks all s3 connections in any test or fixture that includes it"""
     with mock_s3():
         yield
 
@@ -85,7 +85,7 @@ def setup_bucket_w_contents(mock_s3_client, test_bucket, test_keys):
 
 @pytest.fixture
 def setup_bucket_wo_contents(mock_s3_client, test_bucket):
-    """ Sets up a bucket with no contents. """
+    """Sets up a bucket with no contents."""
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
 

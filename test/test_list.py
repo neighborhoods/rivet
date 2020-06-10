@@ -15,9 +15,7 @@ def test_list_objects_w_objects(setup_bucket_w_contents,
 
 def test_list_objects_wo_objects(setup_bucket_wo_contents,
                                  test_bucket):
-    """
-    Tests that rv.list returns an empty list when no keys are present
-    """
+    """Tests that rv.list returns an empty list when no keys are present"""
     objects = list_objects(bucket=test_bucket)
     assert objects == []
 
@@ -75,13 +73,13 @@ def test_list_objects_include_prefix_and_recursive(setup_bucket_w_contents,
 
 def test_exists_w_object_present(setup_bucket_w_contents,
                                  test_bucket, test_keys):
-    """ Tests that rv.exists will return True if a matching path is found """
+    """Tests that rv.exists will return True if a matching path is found"""
     assert exists(test_keys[0], test_bucket)
 
 
 def test_exists_wo_object_present(setup_bucket_wo_contents,
                                   test_bucket, test_keys):
-    """ Tests that rv.exists will return False if no matching path is found """
+    """Tests that rv.exists will return False if no matching path is found"""
     assert not exists(test_keys[0], test_bucket)
 
 

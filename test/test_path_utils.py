@@ -13,6 +13,10 @@ def test_refuses_no_filetype():
 
 
 def test_clean_path():
+    """
+    Tests that 'clean_path' raises errors in accordance with good
+    path name practices.
+    """
     with pytest.raises(ValueError,
                        match='Double-forward slashes .* not permitted'):
         double_slash_path = 'folder0/folder1//df.csv'
