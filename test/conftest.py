@@ -10,6 +10,11 @@ import pytest
 
 @pytest.fixture(autouse=True, scope='session')
 def aws_credentials():
+    """
+    Sets AWS credentials to invalid values. Applied to all test functions and
+    scoped to the entire testing session, so there's no chance of interfering
+    with production buckets.
+    """
     os.environ['AWS_ACCESS_KEY_ID'] = 'testing'
     os.environ['AWS_SECRET_ACCESS_KEY'] = 'testing'
     os.environ['AWS_SECURITY_TOKEN'] = 'testing'
@@ -18,11 +23,13 @@ def aws_credentials():
 
 @pytest.fixture
 def test_bucket():
+    """ Universal bucket name for use throughout testing """
     return 'test_bucket'
 
 
 @pytest.fixture
 def test_keys():
+    """ List of keys to be used for populating a bucket with empty objects """
     return sorted([
         'test_key_0.csv',
         'folder0/test_key_1.pq',
@@ -34,6 +41,7 @@ def test_keys():
 
 @pytest.fixture
 def test_df_keys():
+    """ List of keys to be used for populating a bucket with DataFrames """
     return {
         'csv': ['df.csv'],
         'pkl': ['df.pkl', 'df.pickle'],
@@ -43,6 +51,10 @@ def test_df_keys():
 
 @pytest.fixture
 def test_df():
+    """
+    Universal dataframe for use throughout testing. Multiple data types
+    used to test for proper encoding/decoding.
+    """
     return pd.DataFrame({
         'intcol': [1, 2, 3],
         'strcol': ['four', 'five', 'six'],
@@ -52,12 +64,17 @@ def test_df():
 
 @pytest.fixture
 def mock_s3_client():
+    """ Mocks all s3 connections in any test or fixture that includes it """
     with mock_s3():
         yield
 
 
 @pytest.fixture
 def setup_bucket_w_contents(mock_s3_client, test_bucket, test_keys):
+    """
+    Sets up a bucket with objects containing the empty string, based off
+    keys in 'test_keys'
+    """
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
 
@@ -68,6 +85,7 @@ def setup_bucket_w_contents(mock_s3_client, test_bucket, test_keys):
 
 @pytest.fixture
 def setup_bucket_wo_contents(mock_s3_client, test_bucket):
+    """ Sets up a bucket with no contents. """
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
 
@@ -76,6 +94,11 @@ def setup_bucket_wo_contents(mock_s3_client, test_bucket):
 
 @pytest.fixture
 def setup_bucket_w_dfs(mock_s3_client, test_bucket, test_df, test_df_keys):
+    """
+    Sets up a bucket populated with dataframes that contain the data as
+    defined in 'test_df', at the keys and storage formats defined in
+    'test_df_keys'
+    """
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
 

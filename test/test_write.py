@@ -7,8 +7,11 @@ import pandas as pd
 from river import write
 
 
-def test_read_csv(setup_bucket_wo_contents, test_bucket,
-                  test_df, test_df_keys):
+def test_write_csv(setup_bucket_wo_contents, test_bucket,
+                   test_df, test_df_keys):
+    """
+    Tests that writing files stored as as CSV works properly
+    """
     s3 = boto3.client('s3')
 
     for key in test_df_keys['csv']:
@@ -20,7 +23,10 @@ def test_read_csv(setup_bucket_wo_contents, test_bucket,
             assert df.equals(test_df)
 
 
-def test_read_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+def test_write_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """
+    Tests that writing pickled files works properly
+    """
     s3 = boto3.client('s3')
 
     for key in test_df_keys['pkl']:
@@ -35,7 +41,10 @@ def test_read_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
                 assert df.equals(test_df)
 
 
-def test_read_pq(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+def test_write_pq(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """
+    Tests that writing files stored as as Parquet works properly
+    """
     s3 = boto3.client('s3')
 
     for key in test_df_keys['pq']:

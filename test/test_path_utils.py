@@ -4,6 +4,10 @@ from river.s3_path_utils import get_filetype, clean_path
 
 
 def test_refuses_no_filetype():
+    """
+    Tests that 'get_filetype' will raise an error if the key
+    has no filetype extension
+    """
     with pytest.raises(ValueError, match='must contain an extension'):
         get_filetype('invalid_key')
 

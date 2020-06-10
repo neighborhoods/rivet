@@ -7,6 +7,10 @@ from river import copy
 
 
 def test_copy(setup_bucket_w_dfs, test_bucket, test_df_keys):
+    """
+    Tests that the rv.copy successfully copies an object from one
+    S3 key to another without mutating it.
+    """
     source_path = test_df_keys['csv'][0]
 
     dot_ind = source_path.find('.')
