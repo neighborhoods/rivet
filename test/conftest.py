@@ -1,7 +1,10 @@
 import os
+from tempfile import NamedTemporaryFile
 
 import boto3
 from moto import mock_s3
+import pandas as pd
+import pickle
 import pytest
 
 
@@ -30,6 +33,24 @@ def test_keys():
 
 
 @pytest.fixture
+def test_df_keys():
+    return {
+        'csv': ['df.csv'],
+        'pkl': ['df.pkl', 'df.pickle'],
+        'pq': ['df.pq', 'df.parquet']
+    }
+
+
+@pytest.fixture
+def test_df():
+    return pd.DataFrame({
+        'intcol': [1, 2, 3],
+        'strcol': ['four', 'five', 'six'],
+        'floatcol': [7.0, 8.0, 9.0]
+    })
+
+
+@pytest.fixture
 def mock_s3_client():
     with mock_s3():
         yield
@@ -54,8 +75,24 @@ def setup_bucket_wo_contents(mock_s3_client, test_bucket):
 
 
 @pytest.fixture
-def setup_bucket_w_dfs(mock_s3_client, test_bucket):
+def setup_bucket_w_dfs(mock_s3_client, test_bucket, test_df, test_df_keys):
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
+
+    for key in test_df_keys['csv']:
+        with NamedTemporaryFile() as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['pkl']:
+        with NamedTemporaryFile() as tmpfile:
+            pickle.dump(test_df, tmpfile, protocol=pickle.HIGHEST_PROTOCOL)
+            tmpfile.flush()
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['pq']:
+        with NamedTemporaryFile() as tmpfile:
+            test_df.to_parquet(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
 
     yield

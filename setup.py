@@ -68,7 +68,8 @@ setup(
     packages=find_packages(),
     install_requires=[
         'boto3>=1.10.0',
-        'pandas>=1.0.0'
+        'pandas>=1.0.0',
+        'pyarrow>=0.17.0'
     ],
     cmdclass={
         'upload': UploadCommand,

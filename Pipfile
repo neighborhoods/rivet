@@ -12,6 +12,7 @@ pytest = "==5.3.2"
 [packages]
 boto3 = "==1.13.11"
 pandas = "==1.0.3"
+pyarrow = "==0.17.1"
 
 [requires]
 python_version = "3.7"
