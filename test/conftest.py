@@ -30,20 +30,32 @@ def test_keys():
 
 
 @pytest.fixture
-def setup_bucket_w_contents(test_bucket, test_keys):
+def mock_s3_client():
     with mock_s3():
-        s3 = boto3.client('s3')
-        s3.create_bucket(Bucket=test_bucket)
-
-        for key in test_keys:
-            s3.put_object(Bucket=test_bucket, Key=key, Body='')
         yield
 
 
 @pytest.fixture
-def setup_bucket_wo_contents(test_bucket):
-    with mock_s3():
-        s3 = boto3.client('s3')
-        s3.create_bucket(Bucket=test_bucket)
+def setup_bucket_w_contents(mock_s3_client, test_bucket, test_keys):
+    s3 = boto3.client('s3')
+    s3.create_bucket(Bucket=test_bucket)
 
-        yield
+    for key in test_keys:
+        s3.put_object(Bucket=test_bucket, Key=key, Body='')
+    yield
+
+
+@pytest.fixture
+def setup_bucket_wo_contents(mock_s3_client, test_bucket):
+    s3 = boto3.client('s3')
+    s3.create_bucket(Bucket=test_bucket)
+
+    yield
+
+
+@pytest.fixture
+def setup_bucket_w_dfs(mock_s3_client, test_bucket):
+    s3 = boto3.client('s3')
+    s3.create_bucket(Bucket=test_bucket)
+
+    yield
