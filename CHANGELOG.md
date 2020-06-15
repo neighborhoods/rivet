@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - 'exists' function - check if an object exists at a specific S3 key
+- Unit tests!
 
 ## [0.1.1] - 2020-05-19
 
