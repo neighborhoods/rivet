@@ -30,6 +30,34 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
 
     s3 = boto3.client('s3')
     with NamedTemporaryFile() as tmpfile:
+        s3.download_fileobj(bucket, path, tmpfile)
+        tmpfile.flush()
+        obj = read_fn(tmpfile, *args, **kwargs)
+    return obj
+
+
+def read2(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+          *args, **kwargs):
+    """
+    Downloads an object from S3 and reads it into the Python session.
+    Storage format is determined by file extension, to prevent
+    extension-less files in S3.
+
+    Args:
+        filename (str): The name of the file to read from in S3
+        folder (str, optional): The folder/prefix the file is under in S3
+        bucket (str, optional): The S3 bucket to search for the object in
+    Returns:
+        object: The object downloaded from S3
+    """
+    filetype = s3_path_utils.get_filetype(path)
+    read_fn = get_storage_fn(filetype, 'read')
+
+    path = s3_path_utils.clean_path(path)
+    bucket = s3_path_utils.clean_bucket(bucket)
+
+    s3 = boto3.client('s3')
+    with NamedTemporaryFile() as tmpfile:
         s3.download_file(bucket, path, tmpfile.name)
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
@@ -68,6 +96,7 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
 
     s3 = boto3.client('s3')
     with NamedTemporaryFile() as tmpfile:
-        s3.download_file(bucket, path, tmpfile.name)
+        s3.download_fileobj(bucket, path, tmpfile)
+        tmpfile.flush()
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj

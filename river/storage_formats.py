@@ -73,6 +73,10 @@ csv = {
 # Pickle #
 ##########
 
+# Pickle files won't be populated until they are opened post-writing. So,
+# a nested open is done within the pickle reading/writing functions.
+# This will function on Unix-like systems, but will not on Windows.
+
 
 def _read_pickle(tmpfile, *args, **kwargs):
     """
@@ -84,10 +88,8 @@ def _read_pickle(tmpfile, *args, **kwargs):
     Returns:
         object: The unpickled object
     """
-    # Pickle reading from a tempfile if it hasn't been closed post-writing
-    # raises an 'EOFError', so we have to create a secondary opening.
-    with open(tmpfile.name, 'rb') as f:
-        obj = pickle.load(f, *args, **kwargs)
+    with open(tmpfile.name, 'rb') as nested_tmpfile:
+        obj = pickle.load(nested_tmpfile, *args, **kwargs)
     return obj
 
 
@@ -104,9 +106,8 @@ def _write_pickle(obj, tmpfile, protocol=pickle.HIGHEST_PROTOCOL,
             Pickling protocol to use. Can be overridden in args/kwargs.
 
     """
-    pickle.dump(obj, tmpfile, protocol=protocol, *args, **kwargs)
-    # Otherwise, file won't be populated until after 'tmpfile' closes
-    tmpfile.flush()
+    with open(tmpfile.name, 'wb') as nested_tmpfile:
+        pickle.dump(obj, nested_tmpfile, protocol=protocol, *args, **kwargs)
 
 
 pkl = {
