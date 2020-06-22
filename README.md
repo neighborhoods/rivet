@@ -7,8 +7,9 @@ It also enforces good practice in S3 naming conventions.
 `river` acts as an abstraction around the S3 functionality of Amazon's `boto3` package.
 Although `boto3` is very powerful, the expansive functionality it boasts can be overwhelming
 and often results in users sifting through a lot of documentation to find the subset of
-functionality that they need.
-
+functionality that they need. In order to make use of this package, you will need to have
+the environment variables `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` configured
+for the buckets you wish to interact with.
 
 ### General
 1. Because S3 allows for almost anything to be used as an S3 key, it can be very easy to
