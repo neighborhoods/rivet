@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - General usage documentation
+- Progress bar functionality for reading, writing, and copying operations
 
 ### Changed
 - Switched to standard NHDS CI pipeline
