@@ -28,7 +28,8 @@ def copy(source_path,
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(source_path, source_bucket,
-                                     show_progressbar)
+                                     operation='copy',
+                                     show_progressbar=show_progressbar)
 
     copy_source = {
         'Bucket': source_bucket,

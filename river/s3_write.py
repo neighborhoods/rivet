@@ -30,7 +30,8 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(path, bucket,
-                                     show_progressbar)
+                                     operation='write',
+                                     show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
         print('Writing file to tempfile...')

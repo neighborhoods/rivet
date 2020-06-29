@@ -31,7 +31,8 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(path, bucket,
-                                     show_progressbar)
+                                     operation='read',
+                                     show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
         print('Downloading file from S3...')
@@ -74,7 +75,8 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(path, bucket,
-                                     show_progressbar)
+                                     operation='read',
+                                     show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
         print('Downloading file from S3...')
