@@ -4,11 +4,12 @@ from tempfile import NamedTemporaryFile
 import boto3
 
 from river import s3_path_utils
+from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
 
 def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-          *args, **kwargs):
+          show_progressbar=True, *args, **kwargs):
     """
     Writes an object to a specified file format and uploads it to S3.
     Storage format is determined by file extension, to prevent
@@ -28,8 +29,13 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
     bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(path, bucket,
+                                     show_progressbar)
+
     with NamedTemporaryFile() as tmpfile:
+        print('Writing file to tempfile...')
         write_fn(obj, tmpfile, *args, **kwargs)
-        s3.upload_file(tmpfile.name, bucket, path)
+        print('Uploading to S3...')
+        s3.upload_file(tmpfile.name, bucket, path, **s3_kwargs)
 
     return '/'.join([bucket, path])

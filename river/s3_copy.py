@@ -3,12 +3,14 @@ import os
 import boto3
 
 from river import s3_path_utils
+from river.s3_client_config import get_s3_client_kwargs
 
 
 def copy(source_path,
          dest_path,
          source_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-         dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET')):
+         dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+         show_progressbar=True):
     """
     Copy an object from one S3 location into another.
 
@@ -25,10 +27,13 @@ def copy(source_path,
     dest_path = s3_path_utils.clean_path(dest_path)
 
     s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(source_path, source_bucket,
+                                     show_progressbar)
 
     copy_source = {
         'Bucket': source_bucket,
         'Key': source_path
     }
 
-    s3.copy(CopySource=copy_source, Bucket=dest_bucket, Key=dest_path)
+    s3.copy(CopySource=copy_source, Bucket=dest_bucket, Key=dest_path,
+            **s3_kwargs)
