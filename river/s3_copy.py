@@ -22,6 +22,7 @@ def copy(source_path,
             Will be set to 'source_filename' if not provided
         dest_folder (str): Folder to copy to
         dest_bucket (str): Bucket to copy to
+        show_progresbar (bool, default True): Whether to show a progress bar
     """
     source_path = s3_path_utils.clean_path(source_path)
     dest_path = s3_path_utils.clean_path(dest_path)
@@ -36,5 +37,11 @@ def copy(source_path,
         'Key': source_path
     }
 
+    print("Copying object from s3://{}/{} to s3://{}/{}".format(
+        source_bucket,
+        source_path,
+        dest_bucket,
+        dest_path
+    ))
     s3.copy(CopySource=copy_source, Bucket=dest_bucket, Key=dest_path,
             **s3_kwargs)

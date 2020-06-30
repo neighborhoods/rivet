@@ -19,6 +19,7 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
         obj (object): The object to be uploaded to S3
         filename (str): The path to save obj to
         bucket (str, optional): The S3 bucket to save 'obj' in
+        show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
         str: The full path to the object in S3, without the 's3://' prefix
     """
@@ -29,14 +30,14 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
     bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')
-    s3_kwargs = get_s3_client_kwargs(path, bucket,
-                                     operation='write',
-                                     show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
-        print('Writing file to tempfile...')
+        print('Writing object to tempfile...')
         write_fn(obj, tmpfile, *args, **kwargs)
-        print('Uploading to S3...')
+        s3_kwargs = get_s3_client_kwargs(tmpfile.name, bucket,
+                                         operation='write',
+                                         show_progressbar=show_progressbar)
+        print('Uploading to s3://{}/{}...'.format(bucket, path))
         s3.upload_file(tmpfile.name, bucket, path, **s3_kwargs)
 
     return '/'.join([bucket, path])

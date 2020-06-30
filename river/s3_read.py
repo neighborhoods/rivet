@@ -20,6 +20,7 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
         filename (str): The name of the file to read from in S3
         folder (str, optional): The folder/prefix the file is under in S3
         bucket (str, optional): The S3 bucket to search for the object in
+        show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
         object: The object downloaded from S3
     """
@@ -35,7 +36,7 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
                                      show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
-        print('Downloading file from S3...')
+        print('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
         print('Reading from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
@@ -59,6 +60,7 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
         filename (str): The name of the file to read from in S3
         folder (str, optional): The folder/prefix the file is under in S3
         bucket (str, optional): The S3 bucket to search for the object in
+        show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
         object: The object downloaded from S3
     """
@@ -79,8 +81,8 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
                                      show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
-        print('Downloading file from S3...')
+        print('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
-        print('Reading from tempfile...')
+        print('Reading object from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
