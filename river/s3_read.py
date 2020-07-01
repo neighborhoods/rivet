@@ -5,10 +5,11 @@ from tempfile import NamedTemporaryFile
 import boto3
 
 from river import s3_path_utils
+from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
 
-def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
          *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session.
@@ -19,6 +20,7 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
         filename (str): The name of the file to read from in S3
         folder (str, optional): The folder/prefix the file is under in S3
         bucket (str, optional): The S3 bucket to search for the object in
+        show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
         object: The object downloaded from S3
     """
@@ -29,14 +31,20 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
     bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(path, bucket,
+                                     operation='read',
+                                     show_progressbar=show_progressbar)
+
     with NamedTemporaryFile() as tmpfile:
-        s3.download_file(bucket, path, tmpfile.name)
+        print('Downloading from s3://{}/{}...'.format(bucket, path))
+        s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
+        print('Reading from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
 
 
 def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-                     filetype=None, *args, **kwargs):
+                     filetype=None, show_progressbar=True, *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session,
     without following the rules of the normal reading function.
@@ -52,6 +60,7 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
         filename (str): The name of the file to read from in S3
         folder (str, optional): The folder/prefix the file is under in S3
         bucket (str, optional): The S3 bucket to search for the object in
+        show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
         object: The object downloaded from S3
     """
@@ -67,7 +76,13 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
     read_fn = get_storage_fn(filetype, 'read')
 
     s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(path, bucket,
+                                     operation='read',
+                                     show_progressbar=show_progressbar)
+
     with NamedTemporaryFile() as tmpfile:
-        s3.download_file(bucket, path, tmpfile.name)
+        print('Downloading from s3://{}/{}...'.format(bucket, path))
+        s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
+        print('Reading object from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
