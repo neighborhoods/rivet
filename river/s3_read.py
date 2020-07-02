@@ -9,7 +9,7 @@ from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
 
-def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
+def read(path, bucket=None, show_progressbar=True,
          *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session.
@@ -24,6 +24,8 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
     Returns:
         object: The object downloaded from S3
     """
+    bucket = bucket or s3_path_utils.get_default_bucket()
+
     filetype = s3_path_utils.get_filetype(path)
     read_fn = get_storage_fn(filetype, 'read')
 
@@ -43,8 +45,8 @@ def read(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'), show_progressbar=True,
     return obj
 
 
-def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-                     filetype=None, show_progressbar=True, *args, **kwargs):
+def read_badpractice(path, bucket=None, filetype=None, show_progressbar=True,
+                     *args, **kwargs):
     """
     Downloads an object from S3 and reads it into the Python session,
     without following the rules of the normal reading function.
@@ -69,6 +71,8 @@ def read_badpractice(path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
                     'recommended that you use the standard \'read\' '
                     'function to ensure that good naming practices are '
                     'followed.')
+
+    bucket = bucket or s3_path_utils.get_default_bucket()
 
     if filetype is None:
         filetype = s3_path_utils.get_filetype(path)

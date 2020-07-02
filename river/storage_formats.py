@@ -26,6 +26,7 @@ def get_storage_fn(filetype, rw):
 #######
 
 
+# TODO - any way to resolve lost dtypes, like when reading datetimes?
 def _read_csv(tmpfile, *args, **kwargs):
     """
     Reads a DataFrame from a CSV

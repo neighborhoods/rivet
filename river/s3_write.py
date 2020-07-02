@@ -8,7 +8,7 @@ from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
 
-def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+def write(obj, path, bucket=None,
           show_progressbar=True, *args, **kwargs):
     """
     Writes an object to a specified file format and uploads it to S3.
@@ -23,6 +23,8 @@ def write(obj, path, bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
     Returns:
         str: The full path to the object in S3, without the 's3://' prefix
     """
+    bucket = bucket or s3_path_utils.get_default_bucket()
+
     filetype = s3_path_utils.get_filetype(path)
     write_fn = get_storage_fn(filetype, 'write')
 
