@@ -79,7 +79,7 @@ its users can't control the practices of other teams, but as soon as writing
 begins, the package will ensure that best practice is being followed.
 
 ### Other operations
-1. Listing
+1. Listing<br>
 `river` can list the files that are present at a given location in S3, with
 two different options being available for how to do so: `include_prefix` and `recursive`.
 
@@ -114,7 +114,7 @@ to be included in the returned list of keys.
 ```
 import river as rv
 
-rv.list(path='folder1/', bucket='test_bucket', include_prefix=True)
+rv.list_objects(path='folder1/', bucket='test_bucket', include_prefix=True)
 Output: ['folder1/test_key_2.pkl', 'folder1/subfolder0/']
 ```
 
@@ -128,7 +128,7 @@ Output: ['test_key_2.pkl', 'subfolder0/test_key_3.pkl']
 
 `include_prefix` and `recursive` can be used simultaneously.
 
-2. Existence checks
+2. Existence checks<br>
 As an extension of listing operations, `river` can check if an object exists at
 a specific S3 key. Note that for existence to be `True`, there must be an
 _exact_ match with the key provided
@@ -151,7 +151,7 @@ rv.exists('test_key_.csv', bucket='test_bucket')
 Output: False
 ```
 
-3. Copying
+3. Copying<br>
 It is possible to copy a file from one location in S3 to another using `river`.
 This function is not configurable - it only takes a source and destination key and bucket.
 ```
