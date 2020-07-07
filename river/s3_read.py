@@ -1,5 +1,4 @@
 import logging
-import os
 from tempfile import NamedTemporaryFile
 
 import boto3
