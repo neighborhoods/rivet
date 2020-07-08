@@ -3,9 +3,11 @@ import re
 
 import boto3
 
+from river import s3_path_utils
+
 
 def list_objects(path='',
-                 bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+                 bucket=None,
                  include_prefix=False, recursive=False):
     """
     Lists objects in an S3 bucket.
@@ -19,6 +21,7 @@ def list_objects(path='',
     Returns:
         list<str>: List of S3 paths
     """
+    bucket = bucket or s3_path_utils.get_default_bucket()
     s3 = boto3.client('s3')
 
     response = s3.list_objects_v2(Bucket=bucket, Prefix=path)

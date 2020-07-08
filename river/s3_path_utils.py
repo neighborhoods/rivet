@@ -72,3 +72,13 @@ def clean_bucket(bucket):
     if bucket.startswith(prefix):
         bucket = bucket[len(prefix):]
     return bucket
+
+
+def get_default_bucket():
+    try:
+        bucket = os.environ['RV_DEFAULT_S3_BUCKET']
+    except KeyError as e:
+        raise Exception('Target bucket must be defined either as an '
+                        'argument or via the environment variable '
+                        '\'RV_DEFAULT_S3_BUCKET\'') from e
+    return bucket

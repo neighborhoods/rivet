@@ -1,5 +1,3 @@
-import os
-
 import boto3
 
 from river import s3_path_utils
@@ -8,8 +6,8 @@ from river.s3_client_config import get_s3_client_kwargs
 
 def copy(source_path,
          dest_path,
-         source_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
-         dest_bucket=os.getenv('RV_DEFAULT_S3_BUCKET'),
+         source_bucket=None,
+         dest_bucket=None,
          show_progressbar=True):
     """
     Copy an object from one S3 location into another.
@@ -24,6 +22,9 @@ def copy(source_path,
         dest_bucket (str): Bucket to copy to
         show_progresbar (bool, default True): Whether to show a progress bar
     """
+    source_bucket = source_bucket or s3_path_utils.get_default_bucket()
+    dest_bucket = dest_bucket or s3_path_utils.get_default_bucket()
+
     source_path = s3_path_utils.clean_path(source_path)
     dest_path = s3_path_utils.clean_path(dest_path)
 
