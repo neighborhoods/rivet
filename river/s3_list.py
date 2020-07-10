@@ -32,7 +32,7 @@ def list_objects(path='',
 
     if not recursive:
         keys = list(
-            {re.match(path + r'[\w. ]*/?', key).group() for key in keys}
+            {re.match(path + r'[^/]*/?', key).group() for key in keys}
         )
     if '/' in path and not include_prefix:
         keys = [key[path.rfind('/') + 1:] for key in keys]
