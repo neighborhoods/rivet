@@ -155,7 +155,7 @@ def _write_parquet(obj, tmpfile, index=False, *args, **kwargs):
         raise TypeError('Storage format of \'pq\'/\'parquet\' can only '
                         'be used with DataFrames.')
 
-    obj.to_parquet(tmpfile.name, index=index)
+    obj.to_parquet(tmpfile.name, index=index, *args, **kwargs)
 
 
 pq = {
