@@ -1,5 +1,7 @@
 import pickle
+
 import pandas as pd
+import pandavro as pdx
 
 
 def get_storage_fn(filetype, rw):
@@ -87,6 +89,7 @@ def _read_pickle(tmpfile, *args, **kwargs):
     """
     # Pickle reading from a tempfile if it hasn't been closed post-writing
     # raises an 'EOFError', so we have to create a secondary opening.
+    # Will work on unix-like systems, but not Windows.
     with open(tmpfile.name, 'rb') as f:
         obj = pickle.load(f, *args, **kwargs)
     return obj
@@ -130,7 +133,7 @@ def _read_parquet(tmpfile, *args, **kwargs):
         tmpfile (tempfile.NamedTemporaryFile):
             Connection to the file to be read from
     Returns:
-        pd.DataFrame: The DataFrame read from CSV
+        pd.DataFrame: The DataFrame read from disk
     """
     obj = pd.read_parquet(tmpfile.name, *args, **kwargs)
     return obj
@@ -155,7 +158,7 @@ def _write_parquet(obj, tmpfile, index=False, *args, **kwargs):
         raise TypeError('Storage format of \'pq\'/\'parquet\' can only '
                         'be used with DataFrames.')
 
-    obj.to_parquet(tmpfile.name, index=index)
+    obj.to_parquet(tmpfile.name, index=index, *args, **kwargs)
 
 
 pq = {
@@ -165,14 +168,62 @@ pq = {
 
 ##############################################################################
 
-# TODO
+
 ########
 # AVRO #
 ########
 
+def _read_avro(tmpfile, *args, **kwargs):
+    """
+    Reads a DataFrame from an Avro file
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from Avro
+    """
+
+    # Pandavro reading from a tempfile if it hasn't been closed post-writing
+    # raises an 'ValueError', so we have to create a secondary opening.
+    # Will work on unix-like systems, but not Windows.
+    with open(tmpfile.name, 'rb') as f:
+        df = pdx.read_avro(f, *args, **kwargs)
+
+    datetime_cols = df.columns[df.dtypes == 'datetime64[ns, UTC]']
+    df[datetime_cols] = df[datetime_cols].apply(
+        lambda x: x.dt.tz_convert(None))
+    return df
+
+
+def _write_avro(df, tmpfile, *args, **kwargs):
+    """
+    Saves a DataFrame to Avro format
+
+    Args:
+        obj (pd.DataFrame): The DataFrame to be written to Avro
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+    """
+    pdx.to_avro(tmpfile, df, *args, **kwargs)
+
+
+avro = {
+    'read': _read_avro,
+    'write': _write_avro
+}
+
+##############################################################################
+
+# TODO
+#######
+# ORC #
+#######
+
 ##############################################################################
 
 format_fn_map = {
+   'avro': avro,
    'csv': csv,
    'pickle': pkl,
    'pkl': pkl,
