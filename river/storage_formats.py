@@ -216,8 +216,8 @@ def _write_avro(df, tmpfile, save_datetimes_as_millis=True, *args, **kwargs):
     if save_datetimes_as_millis:
         schema = pdx.__schema_infer(df).copy()
 
-        for x in schema['fields']:
-            non_null_type = x['type'][1]
+        for field in schema['fields']:
+            non_null_type = field['type'][1]
             if isinstance(non_null_type, dict):
                 if non_null_type.get('logicalType') == 'timestamp-micros':
                     non_null_type['logicalType'] = 'timestamp-millis'
