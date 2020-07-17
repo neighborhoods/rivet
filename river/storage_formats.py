@@ -196,7 +196,7 @@ def _read_avro(tmpfile, *args, **kwargs):
     return df
 
 
-def _write_avro(df, tmpfile, *args, **kwargs):
+def _write_avro(df, tmpfile, save_datetimes_as_millis=True, *args, **kwargs):
     """
     Saves a DataFrame to Avro format
 
@@ -204,8 +204,25 @@ def _write_avro(df, tmpfile, *args, **kwargs):
         obj (pd.DataFrame): The DataFrame to be written to Avro
         tmpfile (tempfile.NamedTemporaryFile):
             Connection to the file to be written to
+        save_datetimes_as_millis (bool):
+            Whether to save timestamps as milliseconds or
+            leave it as the pandavro default microseconds
     """
-    pdx.to_avro(tmpfile, df, *args, **kwargs)
+    # pandavro creates an Avro schema for a dataframe if one is not provided.
+    # These auto-generated schemas make a hard assumption that datetimes
+    # should be saved as microseconds. Here we use the same function that
+    # 'to_avro' uses internally to generate the schema, and modify the
+    # datetime encoding if desired
+    if save_datetimes_as_millis:
+        schema = pdx.__schema_infer(df).copy()
+
+        for x in schema['fields']:
+            non_null_type = x['type'][1]
+            if isinstance(non_null_type, dict):
+                if non_null_type.get('logicalType') == 'timestamp-micros':
+                    non_null_type['logicalType'] = 'timestamp-millis'
+
+    pdx.to_avro(tmpfile, df, schema=schema, *args, **kwargs)
 
 
 avro = {
