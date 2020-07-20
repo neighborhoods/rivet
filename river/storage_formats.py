@@ -173,7 +173,7 @@ pq = {
 # AVRO #
 ########
 
-def _read_avro(tmpfile, *args, **kwargs):
+def _read_avro(tmpfile, remove_timezone_from_type=True, *args, **kwargs):
     """
     Reads a DataFrame from an Avro file
 
@@ -190,9 +190,10 @@ def _read_avro(tmpfile, *args, **kwargs):
     with open(tmpfile.name, 'rb') as f:
         df = pdx.read_avro(f, *args, **kwargs)
 
-    datetime_cols = df.columns[df.dtypes == 'datetime64[ns, UTC]']
-    df[datetime_cols] = df[datetime_cols].apply(
-        lambda x: x.dt.tz_convert(None))
+    if remove_timezone_from_type:
+        datetime_cols = df.columns[df.dtypes == 'datetime64[ns, UTC]']
+        df[datetime_cols] = df[datetime_cols].apply(
+            lambda x: x.dt.tz_convert(None))
     return df
 
 
