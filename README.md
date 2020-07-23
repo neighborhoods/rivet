@@ -83,7 +83,7 @@ begins, the package will ensure that best practice is being followed.
 `river` can list the files that are present at a given location in S3, with
 two different options being available for how to do so: `include_prefix` and `recursive`.
 
-We will be using the following example S3 bucket structure:
+ We will be using the following example S3 bucket structure:
 ```
 test_bucket
 |---- test_key_0.csv
@@ -97,36 +97,49 @@ test_bucket
       |---- test_key_4.csv
 ```
 
-`rv.list` would behave as follows with default behavior:
+  - `rv.list` would behave as follows with default behavior:
+     ```
+     import river as rv
 
-```
-import river as rv
+     rv.list(path='', bucket='test_bucket')
+     Output: ['test_key_0.csv', 'folder0/', 'folder1/', 'folder2/']
 
-rv.list(path='', bucket='test_bucket')
-Output: ['test_key_0.csv', 'folder0/', 'folder1/', 'folder2/']
+     rv.list(path='folder1/', bucket='test_bucket')
+     Output: ['test_key_2.pkl', 'subfolder0/']
+     ```
 
-rv.list(path='folder1/', bucket='test_bucket')
-Output: ['test_key_2.pkl', 'subfolder0/']
-```
+  - `include_prefix` option will result in the full S3 key up to the current folder
+ to be included in the returned list of keys.
+     ```
+     import river as rv
 
-The `include_prefix` option will result in the full S3 key up to the current folder
-to be included in the returned list of keys.
-```
-import river as rv
+     rv.list_objects(path='folder1/', bucket='test_bucket', include_prefix=True)
+     Output: ['folder1/test_key_2.pkl', 'folder1/subfolder0/']
+     ```
 
-rv.list_objects(path='folder1/', bucket='test_bucket', include_prefix=True)
-Output: ['folder1/test_key_2.pkl', 'folder1/subfolder0/']
-```
+  - The `recursive` option will result in objects stored in nested folders to be returned as well.
+    ```
+    import river as rv
 
-The `recursive` option will result in objects stored in nested folders to be returned as well.
-```
-import river as rv
+    rv.list(path='folder1', bucket='test_bucket', recursive=True)
+    Output: ['test_key_2.pkl', 'subfolder0/test_key_3.pkl']
+    ```
 
-rv.list(path='folder1', bucket='test_bucket', recursive=True)
-Output: ['test_key_2.pkl', 'subfolder0/test_key_3.pkl']
-```
+  - `include_prefix` and `recursive` can be used simultaneously.
 
-`include_prefix` and `recursive` can be used simultaneously.
+  - Regular expression matching on keys can be performed with the `matches` parameter.
+      - You can account for your key prefix:
+          1. In the `path` argument (highly encouraged for the above reasons): `rv.list_objects(path='folder0/')`
+          2. Hard-coded as part of the regular expression in your `matches` argument: `rv.list_objects(matches='folder0/.*')`
+          3. or by accounting for it in the matching logic of your regular expression: `rv.list_objects(matches='f.*der0/.*')`
+
+      - When you are using both `path` and `matches` parameters, however, there is one situation you need to be cautious of:
+          1. Hard-coding the path in `path` and using `matches` to match on anything that comes _after_ the path works great: `rv.list_objects(path='folder0/', matches='other_.*.csv')`
+          2. Hard-coding the path in `path` and including the hard-coded path in `matches` works fine, but is discouraged for a number of reasons: `rv.list_objects(path='folder0/', matches='folder0/other_.*.csv')`
+          3. What **will not** work is hard-coding the path in `path` and dynamically matching it in `matches`: `rv.list_objects(path='folder0/', matches='f.*der0/other_.*.csv')`
+              - This is because including the path in the regular expression interferes with the logic of the function. When you provide the hard-coded path both in `path` and in the beginning of `matches`, it can be detected and removed from the regular expression, but there is no definitive way to do this when you are matching on it.
+
+      - So, in general, try to separate the keep `path` and `matches` entirely separate if at all possible.
 
 2. Existence checks<br>
 As an extension of listing operations, `river` can check if an object exists at
