@@ -38,7 +38,20 @@ def test_write_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
 
 
 def test_write_pq(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
-    """Tests that writing files stored as as Parquet works properly"""
+    """Tests that writing files stored as Parquet works properly"""
+    s3 = boto3.client('s3')
+
+    for key in test_df_keys['pq']:
+        write(test_df, key, test_bucket)
+
+        with NamedTemporaryFile() as tmpfile:
+            s3.download_file(test_bucket, key, tmpfile.name)
+            df = pd.read_parquet(tmpfile.name)
+            assert df.equals(test_df)
+
+
+def test_write_avro(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """Tests that writing files stored as Avro works properly"""
     s3 = boto3.client('s3')
 
     for key in test_df_keys['pq']:
