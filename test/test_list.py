@@ -26,7 +26,8 @@ def test_list_objects_include_prefix(setup_bucket_w_contents,
     Tests that the 'include_prefix' functionality successfully includes
     prefixes of matching keys
     """
-    prefix = get_prefixes_w_nested_folders(test_keys)
+    key_w_nested_folder = get_key_w_nested_folder(test_keys)
+    prefix = key_w_nested_folder.split('/', 1)[0] + '/'
 
     keys_w_prefix = []
     for key in test_keys:
@@ -48,7 +49,8 @@ def test_list_objects_recursive(setup_bucket_w_contents,
     Tests that the 'recursive' functionality successfully includes any
     nested keys
     """
-    prefix = get_prefixes_w_nested_folders(test_keys)
+    key_w_nested_folder = get_key_w_nested_folder(test_keys)
+    prefix = key_w_nested_folder.split('/', 1)[0] + '/'
 
     recursive_keys = [key[len(prefix):] for key in test_keys
                       if key.startswith(prefix)]
@@ -62,7 +64,8 @@ def test_list_objects_include_prefix_and_recursive(setup_bucket_w_contents,
     """
     Tests that 'include_prefix' and 'recursive' work properly together
     """
-    prefix = get_prefixes_w_nested_folders(test_keys)
+    key_w_nested_folder = get_key_w_nested_folder(test_keys)
+    prefix = key_w_nested_folder.split('/', 1)[0] + '/'
     recursive_keys_w_prefix = [key for key in test_keys
                                if key.startswith(prefix)]
 
@@ -94,9 +97,70 @@ def test_exists_only_exact_match(setup_bucket_w_contents,
     assert not exists(partial_key[0], test_bucket)
 
 
-def get_prefixes_w_nested_folders(keys):
+def test_list_regexp_matching(setup_bucket_w_contents,
+                              test_bucket, test_keys):
     """
-    Given a list of S3 keys, returns the first prefix that contains
+    Tests that regular expression matching only returns keys that match
+    the provided regular expression.
+    """
+    key_w_folder = get_key_w_folder_wo_nested_folder(test_keys)
+    prefix, filename = key_w_folder.split('/')
+    prefix += '/'
+    filetype = key_w_folder.rsplit('.', 1)[-1]
+
+    expected_keys = [filename]
+    matches = r'.*\.' + filetype
+    keys = list_objects(path=prefix, bucket=test_bucket, matches=matches)
+
+    assert keys == expected_keys
+
+
+def test_list_regexp_matching_recursive(setup_bucket_w_contents,
+                                        test_bucket, test_keys):
+    """
+    Tests that regular expression matching properly handles the
+    recursive parameter
+    """
+    key_w_folder = get_key_w_nested_folder(test_keys)
+    prefix, path = key_w_folder.split('/', 1)
+    prefix += '/'
+    filetype = key_w_folder.rsplit('.', 1)[-1]
+
+    expected_keys_not_recursive = [path.split('/', 1)[0] + '/']
+    expected_keys_recursive = [path]
+
+    matches = r'.*/.*\.' + filetype
+    not_recursive_keys = list_objects(path=prefix,
+                                      bucket=test_bucket,
+                                      matches=matches)
+    assert not_recursive_keys == expected_keys_not_recursive
+
+    recursive_keys = list_objects(path=prefix,
+                                  bucket=test_bucket,
+                                  matches=matches,
+                                  recursive=True)
+
+    assert recursive_keys == expected_keys_recursive
+
+
+def get_key_w_folder_wo_nested_folder(keys):
+    """
+    Given a list of S3 keys, returns the first full key containing a folder
+    that does not contain a nested folder.
+
+    Args:
+        keys (list<str>): A list of candidate S3 keys
+    Returns:
+        str: The prefix of the first key found to contain nested folders
+    """
+    for key in keys:
+        if key.count('/') == 1:
+            return key
+
+
+def get_key_w_nested_folder(keys):
+    """
+    Given a list of S3 keys, returns the first full key that contains
     a nested folder.
 
     Args:
@@ -106,4 +170,4 @@ def get_prefixes_w_nested_folders(keys):
     """
     for key in keys:
         if key.count('/') > 1:
-            return key.rsplit('/', 2)[0] + '/'
+            return key
