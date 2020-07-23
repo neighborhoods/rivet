@@ -4,6 +4,7 @@ from tempfile import NamedTemporaryFile
 import boto3
 from moto import mock_s3
 import pandas as pd
+import pandavro as pdx
 import pickle
 import pytest
 
@@ -43,6 +44,7 @@ def test_keys():
 def test_df_keys():
     """List of keys to be used for populating a bucket with DataFrames"""
     return {
+        'avro': ['df.avro'],
         'csv': ['df.csv'],
         'pkl': ['df.pkl', 'df.pickle'],
         'pq': ['df.pq', 'df.parquet']
@@ -101,6 +103,19 @@ def setup_bucket_w_dfs(mock_s3_client, test_bucket, test_df, test_df_keys):
     """
     s3 = boto3.client('s3')
     s3.create_bucket(Bucket=test_bucket)
+
+    avro_schema = pdx.__schema_infer(test_df).copy()
+
+    for field in avro_schema['fields']:
+        non_null_type = field['type'][1]
+        if isinstance(non_null_type, dict):
+            if non_null_type.get('logicalType') == 'timestamp-micros':
+                non_null_type['logicalType'] = 'timestamp-millis'
+
+    for key in test_df_keys['avro']:
+        with NamedTemporaryFile() as tmpfile:
+            pdx.to_avro(tmpfile, test_df, schema=avro_schema)
+            s3.upload_file(tmpfile.name, test_bucket, key)
 
     for key in test_df_keys['csv']:
         with NamedTemporaryFile() as tmpfile:
