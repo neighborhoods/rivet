@@ -20,3 +20,10 @@ def test_read_pq(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
     for key in test_df_keys['pq']:
         df = read(key, test_bucket)
         assert df.equals(test_df)
+
+
+def test_read_avro(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """Tests that reading files stored as Avro works properly"""
+    for key in test_df_keys['avro']:
+        df = read(key, test_bucket)
+        assert df.equals(test_df)
