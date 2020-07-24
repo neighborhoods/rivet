@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Progress bar functionality for reading, writing, and copying operations
 - Support for Avro filetype
 - Regular expression matching functionality for `list_objects`
+- Bugfix: Kwargs can now be passed when writing in Parquet format
+- Bugfix: Relaxed requirements on what was considered a valid S3 key for the
+`recursive` option of `list_objects` - S3 will handle that for the function,
+no reason we need to account for it
+- Bugfix: Default values for `bucket` (as provided by environment variables)
+is now evaluated at function call-time rather than upon import
 
 ### Changed
 - Switched to standard NHDS CI pipeline
