@@ -12,6 +12,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Progress bar functionality for reading, writing, and copying operations
 - Support for Avro filetype
 - Regular expression matching functionality for `list_objects`
+- `list_objects` can now return greater than 1000 objects - previously,
+the list was truncated at 1000
+- Bugfix: Kwargs can now be passed when writing in Parquet format. All other
+formats accepted kwargs, but it was left out from Parquet as an oversight.
+- Bugfix: Relaxed requirements on what was considered a valid S3 key for the
+`recursive` option of `list_objects`. Prior to this, `list_objects` was filtering
+out keys that it was not supposed to under certain circumstances.
+S3 will not allow invalid keys in the first place, no reason we need to account for it
+- Bugfix: Default values for `bucket` (as provided by environment variables)
+is now evaluated at function call-time rather than upon import
 
 ### Changed
 - Switched to standard NHDS CI pipeline
