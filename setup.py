@@ -50,7 +50,7 @@ class UploadCommand(Command):
             'twine upload dist/* '
             '--repository-url http://pypi.neighborhoods.com/simple/')
         if returned_error:
-            raise ValueError('Pushing to PyPi failed.as')
+            raise ValueError('Pushing to PyPi failed.')
 
         self.status('Pushing git tags…')
         os.system('git tag v{0}'.format(about["__version__"]))
