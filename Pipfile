@@ -15,7 +15,7 @@ wheel = "0.34.2"
 boto3 = "==1.13.11"
 pandas = "==1.0.3"
 pyarrow = "==0.17.1"
-pandavro = "1.5.1"
+pandavro = "==1.5.2"
 
 [requires]
 python_version = "3.7"
