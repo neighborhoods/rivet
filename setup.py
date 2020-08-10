@@ -46,11 +46,11 @@ class UploadCommand(Command):
                   sys.executable))
 
         self.status('Uploading the package to PyPI via Twine…')
-        return_code = os.system(
+        returned_error = os.system(
             'twine upload dist/* '
             '--repository-url http://pypi.neighborhoods.com/simple/')
-        if return_code:
-            raise ValueError('Pushing to PyPi failed.')
+        if returned_error:
+            raise ValueError('Pushing to PyPi failed.as')
 
         self.status('Pushing git tags…')
         os.system('git tag v{0}'.format(about["__version__"]))
