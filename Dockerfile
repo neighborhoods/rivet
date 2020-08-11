@@ -3,4 +3,4 @@ WORKDIR /usr/src/app
 
 COPY . .
 RUN pip install pipenv
-RUN pipenv install --dev --ignore-pipfile --system --deploy
+RUN pipenv install --dev --system --deploy
