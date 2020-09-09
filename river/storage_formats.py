@@ -238,7 +238,7 @@ def _read_json(tmpfile, *args, **kwargs):
     return df
 
 
-def _write_json(df, tmpfile, lake_format=False, *args, **kwargs):
+def _write_json(df, tmpfile, hive_format=False, *args, **kwargs):
     """
     Saves a DataFrame to JSON format
 
@@ -246,12 +246,12 @@ def _write_json(df, tmpfile, lake_format=False, *args, **kwargs):
         obj (pd.DataFrame): The DataFrame to be written to Avro
         tmpfile (tempfile.NamedTemporaryFile):
             Connection to the file to be written to
-        lake_format (bool):
+        hive_format (bool):
             Whether to format the JSON to be read as part of a Hive table.
             Note: Data formatted this way will not be natively readable
             back into a Python session.
     """
-    if lake_format:
+    if hive_format:
         for row in df.iterrows():
             row[1].to_json(tmpfile)
             tmpfile.write('\n')
