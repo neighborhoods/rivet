@@ -219,6 +219,98 @@ avro = {
 
 ##############################################################################
 
+########
+# JSON #
+########
+
+
+def _read_json(tmpfile, *args, **kwargs):
+    """
+    Reads a DataFrame from a JSON file
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from JSON
+    """
+    df = pd.read_json(tmpfile.name)
+    return df
+
+
+def _write_json(df, tmpfile, lake_format=False, *args, **kwargs):
+    """
+    Saves a DataFrame to JSON format
+
+    Args:
+        obj (pd.DataFrame): The DataFrame to be written to Avro
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+        lake_format (bool):
+            Whether to format the JSON to be read as part of a Hive table.
+            Note: Data formatted this way will not be natively readable
+            back into a Python session.
+    """
+    if lake_format:
+        for row in df.iterrows():
+            row[1].to_json(tmpfile)
+            tmpfile.write('\n')
+    else:
+        df.to_json(tmpfile.name)
+
+
+json = {
+    'read': _read_json,
+    'write': _write_json
+}
+
+##############################################################################
+
+###########
+# Feather #
+###########
+
+
+def _read_feather(tmpfile, *args, **kwargs):
+    """
+    Reads a DataFrame from a feather file
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from feather
+    """
+    df = pd.read_feather(tmpfile.name)
+    return df
+
+
+def _write_feather(df, tmpfile, *args, **kwargs):
+    """
+    Saves a DataFrame to feather format
+
+    Args:
+        obj (pd.DataFrame): The DataFrame to be written to Avro
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+    """
+    if any(df.dtypes == 'object'):
+        print('WARNING: Columns of dtype "object" detected in dataframe '
+              'being written to feather format. Feather does not support '
+              'python objects/classes or collection types, such as lists '
+              'and dictionaries, and will produce unexpected results. '
+              'If this column merely contains strings, then this message '
+              'can be ignored.')
+    df.to_feather(tmpfile.name)
+
+
+feather = {
+    'read': _read_feather,
+    'write': _write_feather
+}
+
+##############################################################################
+
 # TODO
 #######
 # ORC #
@@ -229,6 +321,9 @@ avro = {
 format_fn_map = {
    'avro': avro,
    'csv': csv,
+   'feather': feather,
+   'ft': feather,
+   'json': json,
    'pickle': pkl,
    'pkl': pkl,
    'pq': pq,

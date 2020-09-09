@@ -8,6 +8,20 @@ def test_read_csv(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
         assert df.equals(test_df)
 
 
+def test_read_feather(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """Tests that reading files stored as feather works properly"""
+    for key in test_df_keys['feather']:
+        df = read(key, test_bucket)
+        assert df.equals(test_df)
+
+
+def test_read_json(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
+    """Tests that reading files stored as JSON works properly"""
+    for key in test_df_keys['json']:
+        df = read(key, test_bucket)
+        assert df.equals(test_df)
+
+
 def test_read_pkl(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
     """Tests that reading pickled files works properly"""
     for key in test_df_keys['pkl']:

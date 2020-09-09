@@ -9,7 +9,7 @@ from river import write
 
 def test_write_csv(setup_bucket_wo_contents, test_bucket,
                    test_df, test_df_keys):
-    """Tests that writing files stored as as CSV works properly"""
+    """Tests that writing files stored as aa CSV works properly"""
     s3 = boto3.client('s3')
 
     for key in test_df_keys['csv']:
@@ -18,6 +18,34 @@ def test_write_csv(setup_bucket_wo_contents, test_bucket,
         with NamedTemporaryFile() as tmpfile:
             s3.download_file(test_bucket, key, tmpfile.name)
             df = pd.read_csv(tmpfile.name)
+            assert df.equals(test_df)
+
+
+def test_write_feather(setup_bucket_wo_contents, test_bucket,
+                       test_df, test_df_keys):
+    """Tests that writing files stored as feather works properly"""
+    s3 = boto3.client('s3')
+
+    for key in test_df_keys['feather']:
+        write(test_df, key, test_bucket)
+
+        with NamedTemporaryFile() as tmpfile:
+            s3.download_file(test_bucket, key, tmpfile.name)
+            df = pd.read_feather(tmpfile.name)
+            assert df.equals(test_df)
+
+
+def test_write_json(setup_bucket_wo_contents, test_bucket,
+                    test_df, test_df_keys):
+    """Tests that writing files stored as JSON works properly"""
+    s3 = boto3.client('s3')
+
+    for key in test_df_keys['json']:
+        write(test_df, key, test_bucket)
+
+        with NamedTemporaryFile() as tmpfile:
+            s3.download_file(test_bucket, key, tmpfile.name)
+            df = pd.read_json(tmpfile.name)
             assert df.equals(test_df)
 
 
