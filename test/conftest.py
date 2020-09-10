@@ -46,6 +46,8 @@ def test_df_keys():
     return {
         'avro': ['df.avro'],
         'csv': ['df.csv'],
+        'feather': ['df.feather'],
+        'json': ['df.json'],
         'pkl': ['df.pkl', 'df.pickle'],
         'pq': ['df.pq', 'df.parquet']
     }
@@ -60,7 +62,7 @@ def test_df():
     return pd.DataFrame({
         'intcol': [1, 2, 3],
         'strcol': ['four', 'five', 'six'],
-        'floatcol': [7.0, 8.0, 9.0]
+        'floatcol': [7.0, 8.5, 9.0]
     })
 
 
@@ -112,6 +114,16 @@ def setup_bucket_w_dfs(mock_s3_client, test_bucket, test_df, test_df_keys):
     for key in test_df_keys['csv']:
         with NamedTemporaryFile() as tmpfile:
             test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['feather']:
+        with NamedTemporaryFile() as tmpfile:
+            test_df.to_feather(tmpfile.name)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['json']:
+        with NamedTemporaryFile() as tmpfile:
+            test_df.to_json(tmpfile.name)
             s3.upload_file(tmpfile.name, test_bucket, key)
 
     for key in test_df_keys['pkl']:

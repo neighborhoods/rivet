@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] 2020-09-10
+
+### Added
+- Support for `JSON` and `feather` file formats 
+
+## [1.0.0] 2020-07-24
+
 ### Added
 - General usage documentation
 - Progress bar functionality for reading, writing, and copying operations
