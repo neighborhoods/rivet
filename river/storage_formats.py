@@ -28,7 +28,6 @@ def get_storage_fn(filetype, rw):
 #######
 
 
-# TODO - any way to resolve lost dtypes, like when reading datetimes?
 def _read_csv(tmpfile, *args, **kwargs):
     """
     Reads a DataFrame from a CSV
@@ -168,10 +167,10 @@ pq = {
 
 ##############################################################################
 
-
 ########
 # AVRO #
 ########
+
 
 def _read_avro(tmpfile, remove_timezone_from_type=True, *args, **kwargs):
     """
@@ -238,7 +237,11 @@ def _read_json(tmpfile, *args, **kwargs):
     return df
 
 
+<<<<<<< HEAD
 def _write_json(df, tmpfile, lake_format=False, *args, **kwargs):
+=======
+def _write_json(df, tmpfile, hive_format=False, *args, **kwargs):
+>>>>>>> 56eb31be26e1e28153ecda7849d6582fc0376885
     """
     Saves a DataFrame to JSON format
 
@@ -246,12 +249,20 @@ def _write_json(df, tmpfile, lake_format=False, *args, **kwargs):
         obj (pd.DataFrame): The DataFrame to be written to Avro
         tmpfile (tempfile.NamedTemporaryFile):
             Connection to the file to be written to
+<<<<<<< HEAD
         lake_format (bool):
+=======
+        hive_format (bool):
+>>>>>>> 56eb31be26e1e28153ecda7849d6582fc0376885
             Whether to format the JSON to be read as part of a Hive table.
             Note: Data formatted this way will not be natively readable
             back into a Python session.
     """
+<<<<<<< HEAD
     if lake_format:
+=======
+    if hive_format:
+>>>>>>> 56eb31be26e1e28153ecda7849d6582fc0376885
         for row in df.iterrows():
             row[1].to_json(tmpfile)
             tmpfile.write('\n')
@@ -322,7 +333,10 @@ format_fn_map = {
    'avro': avro,
    'csv': csv,
    'feather': feather,
+<<<<<<< HEAD
    'ft': feather,
+=======
+>>>>>>> 56eb31be26e1e28153ecda7849d6582fc0376885
    'json': json,
    'pickle': pkl,
    'pkl': pkl,
