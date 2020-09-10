@@ -251,9 +251,11 @@ def _write_json(df, tmpfile, hive_format=False, *args, **kwargs):
             back into a Python session.
     """
     if hive_format:
-        for row in df.iterrows():
-            row[1].to_json(tmpfile)
-            tmpfile.write('\n')
+        # Nested open, original tmpfile behaves slightly differently
+        with open(tmpfile.name, 'w') as f:
+            for row in df.iterrows():
+                row[1].to_json(f)
+                f.write('\n')
     else:
         df.to_json(tmpfile.name)
 
