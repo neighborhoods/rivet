@@ -46,7 +46,7 @@ def test_df_keys():
     return {
         'avro': ['df.avro'],
         'csv': ['df.csv'],
-        'feather': ['df.ft', 'df.feather'],
+        'feather': ['df.feather'],
         'json': ['df.json'],
         'pkl': ['df.pkl', 'df.pickle'],
         'pq': ['df.pq', 'df.parquet']
