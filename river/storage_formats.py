@@ -321,7 +321,6 @@ format_fn_map = {
    'avro': avro,
    'csv': csv,
    'feather': feather,
-   'ft': feather,
    'json': json,
    'pickle': pkl,
    'pkl': pkl,
