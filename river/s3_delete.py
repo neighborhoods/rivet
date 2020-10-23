@@ -9,6 +9,9 @@ def delete(path, bucket=None, recursive=False):
 
     objects = list_objects(path=path, bucket=bucket,
                            include_prefix=True, recursive=True)
+
+    if not objects:
+        print('No objects found for deletion at provided path.')
     if len(objects) > 1 and not recursive:
         raise KeyError(
             'Multiple matching objects found with provided path. '
