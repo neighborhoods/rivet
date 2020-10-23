@@ -76,9 +76,6 @@ setup(
         'pandavro==1.5.100',
         'pyarrow>=0.17.0'
     ],
-    dependency_links=[
-        'https://pypi.neighborhoods.com/#/pandavro'
-    ],
     cmdclass={
         'upload': UploadCommand,
     }
