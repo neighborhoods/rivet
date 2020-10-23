@@ -5,6 +5,11 @@ from river.s3_list import list_objects
 
 
 def delete(path, bucket=None, recursive=False):
+    if path == '':
+        raise ValueError(
+            'A delete operation was about to delete the entirety of a bucket. '
+            'That seems unsafe, and has been prevented.'
+        )
     bucket = bucket or s3_path_utils.get_default_bucket()
 
     objects = list_objects(path=path, bucket=bucket,
