@@ -18,7 +18,7 @@ wheel = "~=0.34"
 
 [packages]
 boto3 = "~=1.13"
-pandas = "~=1.0"
+pandas = ">=0.25.3"
 pyarrow = "~=0.17"
 pandavro = {version = "==1.5.100", index = "nhds"}
 

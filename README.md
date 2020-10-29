@@ -17,7 +17,7 @@ lose track of what exactly you have saved in the cloud. A very important example
 filetype - without a file extension at the end of the S3 key, it is entirely possible to
 lose track of what format a file is saved as. `river` enforces file extensions in the objects
 it reads and writes.
-    * Currently supported formats are: CSV, Parquet, Pickle
+    * Currently supported formats are: CSV, JSON, Avro, Feather, Parquet, Pickle
     * Accessible in a Python session via `river.supported_formats`
 
 2. A default S3 bucket can be set up as an environment variable, removing the requirement
