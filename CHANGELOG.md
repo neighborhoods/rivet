@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] 2020-10-29
+
+### Changed
+- Relaxed `pandas` requirement
+
 ## [1.2.0] 2020-10-23
 
 ### Added
