@@ -89,3 +89,17 @@ def read_badpractice(path, bucket=None, filetype=None, show_progressbar=True,
         print('Reading object from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
+
+
+def download_file(path, bucket=None, local_file_path=None,
+                  show_progressbar=True):
+    bucket = bucket or s3_path_utils.get_default_bucket()
+    if local_file_path is None:
+        raise ValueError('A local file path must be provided.')
+
+    s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(path, bucket,
+                                     operation='read',
+                                     show_progressbar=show_progressbar)
+
+    s3.download_file(bucket, path, local_file_path, **s3_kwargs)

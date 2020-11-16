@@ -42,3 +42,16 @@ def write(obj, path, bucket=None,
         s3.upload_file(tmpfile.name, bucket, path, **s3_kwargs)
 
     return '/'.join([bucket, path])
+
+
+def upload_file(local_file_path, path, bucket=None, show_progressbar=True):
+    bucket = bucket or s3_path_utils.get_default_bucket()
+    if local_file_path is None:
+        raise ValueError('A local download location must be provided.')
+
+    s3 = boto3.client('s3')
+    s3_kwargs = get_s3_client_kwargs(path, bucket,
+                                     operation='write',
+                                     show_progressbar=show_progressbar)
+
+    s3.upload_file(local_file_path, bucket, path, **s3_kwargs)
