@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.0] 2020-11-16
 
 ### Added
-- Functions for just downloading a file to disk directly to/from S3
+- Functions for just uploading/downloading a file to disk directly to/from S3
 
 ## [1.2.1] 2020-10-29
 
