@@ -50,7 +50,7 @@ def upload_file(local_file_path, path, bucket=None, show_progressbar=True):
         raise ValueError('A local download location must be provided.')
 
     s3 = boto3.client('s3')
-    s3_kwargs = get_s3_client_kwargs(path, bucket,
+    s3_kwargs = get_s3_client_kwargs(local_file_path, bucket,
                                      operation='write',
                                      show_progressbar=show_progressbar)
 
