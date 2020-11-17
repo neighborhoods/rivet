@@ -45,9 +45,18 @@ def write(obj, path, bucket=None,
 
 
 def upload_file(local_file_path, path, bucket=None, show_progressbar=True):
+    """
+    Uploads a file from local storage directly to S3
+
+    Args:
+        local_file_path (str): Location of the file to upload
+        path (str): The key the file is to be stored under in S3
+        bucket (str, optional): The S3 bucket to store the object in
+        show_progresbar (bool, default True): Whether to show a progress bar
+    """
     bucket = bucket or s3_path_utils.get_default_bucket()
     if local_file_path is None:
-        raise ValueError('A local download location must be provided.')
+        raise ValueError('A local file location must be provided.')
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(local_file_path, bucket,
