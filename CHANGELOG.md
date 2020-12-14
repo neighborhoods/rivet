@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] 2020-12-15
+
+### Changed
+- `pandavro` additions were merged to master and released, so now using the publicly available version
+- Fields in `_version.py` are now available and viewable in-code
+
 ## [1.3.0] 2020-11-16
 
 ### Added
