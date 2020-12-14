@@ -72,8 +72,7 @@ setup(
     install_requires=[
         'boto3>=1.10.0',
         'pandas>=0.25.3',
-        # Version hosted in nhds PyPi
-        'pandavro==1.5.100',
+        'pandavro==1.6',
         'pyarrow>=0.17.0'
     ],
     cmdclass={
