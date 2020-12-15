@@ -8,7 +8,7 @@ from setuptools import setup, find_packages, Command
 here = os.path.abspath(os.path.dirname(__file__))
 
 about = {}
-with open(os.path.join(here, 'river', '__version__.py'), 'r') as f:
+with open(os.path.join(here, 'river', '_version.py'), 'r') as f:
     exec(f.read(), about)
 
 with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
