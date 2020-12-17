@@ -1,5 +1,5 @@
 # river
-A user-friendly Python-to-S3 interface. Adds quality of life and convenience features around `boto3`, including the handling of reading and writing to files in proper formats.  
+A user-friendly Python-to-S3 interface. Adds quality of life and convenience features around `boto3`, including the handling of reading and writing to files in proper formats.  While there is nothing that you can do with `river` that you can't do with `boto3`, `river`'s primary focus is ease-of-use. By handling lower-level operations such as client establishment and default argument specification behind the scenes, the cost of entry to interacting with cloud storage from within Python is lowered.
 It also enforces good practice in S3 naming conventions.
 
 
