@@ -70,7 +70,7 @@ setup(
     install_requires=[
         'boto3>=1.10.0',
         'pandas>=0.25.3',
-        'pandavro==1.6',
+        'pandavro>=1.6',
         'pyarrow>=0.17.0'
     ],
     cmdclass={
