@@ -4,6 +4,9 @@ from .s3_list import list_objects, exists
 from .s3_read import read, read_badpractice, download_file
 from .s3_write import write, upload_file
 from .storage_formats import format_fn_map
+from ._version import (
+    __title__, __description__, __url__, __version__,
+    __author__, __author_email__)
 
 
 supported_formats = list(format_fn_map.keys())
@@ -19,5 +22,11 @@ __all__ = [
     'download_file',
     'write',
     'upload_file',
-    'supported_formats'
+    'supported_formats',
+    '__title__',
+    '__description__',
+    '__url__',
+    '__version__',
+    '__author__',
+    '__author_email__'
 ]
