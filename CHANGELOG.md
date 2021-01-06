@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.3.1] 2020-12-15
 
 ### Changed
-- Going open source!
+- Prepped to go open source!
 - `pandavro` additions were merged to master and released, so now using the publicly available version
 - Fields in `_version.py` are now available and viewable in-code
 

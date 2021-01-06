@@ -7,6 +7,7 @@ verify_ssl = true
 flake8 = "~=3.7"
 moto = "~=1.3"
 pipenv-devcheck = "~=0.2"
+PyGithub = "~=1.54"
 pytest = "~=5.3"
 twine = "~=3.2"
 wheel = "~=0.34"
@@ -14,8 +15,8 @@ wheel = "~=0.34"
 [packages]
 boto3 = "~=1.13"
 pandas = ">=0.25.3"
-pyarrow = "~=0.17"
 pandavro = "~=1.6"
+pyarrow = "~=0.17"
 
 [requires]
 python_version = "3.7"
