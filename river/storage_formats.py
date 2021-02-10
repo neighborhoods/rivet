@@ -1,3 +1,4 @@
+import logging
 import pickle
 
 import pandas as pd
@@ -296,12 +297,13 @@ def _write_feather(df, tmpfile, *args, **kwargs):
             Connection to the file to be written to
     """
     if any(df.dtypes == 'object'):
-        print('WARNING: Columns of dtype "object" detected in dataframe '
-              'being written to feather format. Feather does not support '
-              'python objects/classes or collection types, such as lists '
-              'and dictionaries, and will produce unexpected results. '
-              'If this column merely contains strings, then this message '
-              'can be ignored.')
+        logging.info(
+            'WARNING: Columns of dtype "object" detected in dataframe '
+            'being written to feather format. Feather does not support '
+            'python objects/classes or collection types, such as lists '
+            'and dictionaries, and will produce unexpected results. '
+            'If this column merely contains strings, then this message '
+            'can be ignored.')
     df.to_feather(tmpfile.name)
 
 

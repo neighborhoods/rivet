@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 
 import boto3
 
-from river import s3_path_utils
+from river import inform, s3_path_utils
 from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
@@ -37,9 +37,9 @@ def read(path, bucket=None, show_progressbar=True,
                                      show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
-        print('Downloading from s3://{}/{}...'.format(bucket, path))
+        inform('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
-        print('Reading from tempfile...')
+        inform('Reading from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
 
@@ -84,9 +84,9 @@ def read_badpractice(path, bucket=None, filetype=None, show_progressbar=True,
                                      show_progressbar=show_progressbar)
 
     with NamedTemporaryFile() as tmpfile:
-        print('Downloading from s3://{}/{}...'.format(bucket, path))
+        inform('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
-        print('Reading object from tempfile...')
+        inform('Reading object from tempfile...')
         obj = read_fn(tmpfile, *args, **kwargs)
     return obj
 

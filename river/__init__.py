@@ -1,3 +1,5 @@
+from .config import get_option, set_option
+from .inform import inform
 from .s3_copy import copy
 from .s3_delete import delete
 from .s3_list import list_objects, exists
@@ -23,6 +25,9 @@ __all__ = [
     'write',
     'upload_file',
     'supported_formats',
+    'get_option',
+    'set_option',
+    'inform',
     '__title__',
     '__description__',
     '__url__',
