@@ -175,3 +175,10 @@ rv.copy(source_path='test_path/df.csv',
         source_bucket='test_bucket',
         dest_bucket='test_bucket_destination')
 ```
+
+### Session-Level Configuration
+`river` outputs certain messages to the screen to help interactive users
+maintain awareness of what is being performed behind-the-scenes. If this
+is not desirable (as may be the case for notebooks, pipelines, usage of
+`river` within other packages, etc.), all non-logging output can be
+disabled with `rv.set_option('verbose', False)`.
