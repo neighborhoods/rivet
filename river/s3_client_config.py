@@ -1,3 +1,4 @@
+from river import get_option
 from river.s3_progressbar import S3ProgressBar
 
 
@@ -15,7 +16,7 @@ def get_s3_client_kwargs(path, bucket, operation,
         show_progresbar (bool, default True): Whether to show a progress bar
     """
     s3_kwargs = {}
-    if show_progressbar:
+    if show_progressbar and get_option('verbose'):
         progressbar = S3ProgressBar(path, bucket, operation)
         s3_kwargs['Callback'] = progressbar
     return s3_kwargs

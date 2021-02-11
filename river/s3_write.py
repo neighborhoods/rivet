@@ -2,7 +2,7 @@ from tempfile import NamedTemporaryFile
 
 import boto3
 
-from river import s3_path_utils
+from river import inform, s3_path_utils
 from river.s3_client_config import get_s3_client_kwargs
 from river.storage_formats import get_storage_fn
 
@@ -33,12 +33,12 @@ def write(obj, path, bucket=None,
     s3 = boto3.client('s3')
 
     with NamedTemporaryFile() as tmpfile:
-        print('Writing object to tempfile...')
+        inform('Writing object to tempfile...')
         write_fn(obj, tmpfile, *args, **kwargs)
         s3_kwargs = get_s3_client_kwargs(tmpfile.name, bucket,
                                          operation='write',
                                          show_progressbar=show_progressbar)
-        print('Uploading to s3://{}/{}...'.format(bucket, path))
+        inform('Uploading to s3://{}/{}...'.format(bucket, path))
         s3.upload_file(tmpfile.name, bucket, path, **s3_kwargs)
 
     return '/'.join([bucket, path])

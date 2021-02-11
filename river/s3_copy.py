@@ -1,6 +1,6 @@
 import boto3
 
-from river import s3_path_utils
+from river import inform, s3_path_utils
 from river.s3_client_config import get_s3_client_kwargs
 
 
@@ -38,7 +38,7 @@ def copy(source_path,
         'Key': source_path
     }
 
-    print("Copying object from s3://{}/{} to s3://{}/{}".format(
+    inform("Copying object from s3://{}/{} to s3://{}/{}".format(
         source_bucket,
         source_path,
         dest_bucket,
