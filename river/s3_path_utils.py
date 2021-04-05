@@ -64,10 +64,6 @@ def clean_bucket(bucket):
     Returns:
         str: The cleaned S3 bucket name
     """
-    # if '.' in bucket:
-    #     raise ValueError('Period characters (\'.\') are not permitted '
-    #                      'by river. Use \'river.read_badpractice_file\' '
-    #                      'if reading such a file is necessary.')
     prefix = 's3://'
     if bucket.startswith(prefix):
         bucket = bucket[len(prefix):]
