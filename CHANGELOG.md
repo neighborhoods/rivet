@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.3] 2021-04-05
+
+### Changed
+- Fixed Pyarrow dependency
+
 ## [1.3.2] 2021-02-10
 
 ### Added
