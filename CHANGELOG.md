@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.3.3] 2021-04-05
+## [1.4.0] 2021-04-05
+
+### Added
+- Added support for PSV files (pipe-separated value)
+- Added support for CSV and PSV files that are compressed with `zip` or `gzip`
 
 ### Changed
 - Fixed Pyarrow dependency
