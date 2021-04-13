@@ -23,20 +23,19 @@ def read(path, bucket=None, show_progressbar=True,
     Returns:
         object: The object downloaded from S3
     """
+    path = s3_path_utils.clean_path(path)
     bucket = bucket or s3_path_utils.get_default_bucket()
+    bucket = s3_path_utils.clean_bucket(bucket)
 
     filetype = s3_path_utils.get_filetype(path)
     read_fn = get_storage_fn(filetype, 'read')
-
-    path = s3_path_utils.clean_path(path)
-    bucket = s3_path_utils.clean_bucket(bucket)
 
     s3 = boto3.client('s3')
     s3_kwargs = get_s3_client_kwargs(path, bucket,
                                      operation='read',
                                      show_progressbar=show_progressbar)
 
-    with NamedTemporaryFile() as tmpfile:
+    with NamedTemporaryFile(suffix='.' + filetype) as tmpfile:
         inform('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
         inform('Reading from tempfile...')
@@ -83,7 +82,7 @@ def read_badpractice(path, bucket=None, filetype=None, show_progressbar=True,
                                      operation='read',
                                      show_progressbar=show_progressbar)
 
-    with NamedTemporaryFile() as tmpfile:
+    with NamedTemporaryFile(suffix='.' + filetype) as tmpfile:
         inform('Downloading from s3://{}/{}...'.format(bucket, path))
         s3.download_file(bucket, path, tmpfile.name, **s3_kwargs)
         inform('Reading object from tempfile...')
