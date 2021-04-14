@@ -22,17 +22,16 @@ def write(obj, path, bucket=None,
     Returns:
         str: The full path to the object in S3, without the 's3://' prefix
     """
+    path = s3_path_utils.clean_path(path)
     bucket = bucket or s3_path_utils.get_default_bucket()
+    bucket = s3_path_utils.clean_bucket(bucket)
 
     filetype = s3_path_utils.get_filetype(path)
     write_fn = get_storage_fn(filetype, 'write')
 
-    path = s3_path_utils.clean_path(path)
-    bucket = s3_path_utils.clean_bucket(bucket)
-
     s3 = boto3.client('s3')
 
-    with NamedTemporaryFile() as tmpfile:
+    with NamedTemporaryFile(suffix='.' + filetype) as tmpfile:
         inform('Writing object to tempfile...')
         write_fn(obj, tmpfile, *args, **kwargs)
         s3_kwargs = get_s3_client_kwargs(tmpfile.name, bucket,

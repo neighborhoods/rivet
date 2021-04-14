@@ -11,7 +11,10 @@ def get_filetype(filename):
     Returns:
         str: The filetype of the file
     """
-    filetype = os.path.splitext(filename)[-1][1:].lower()
+    # If the filename isn't named according to good practice,
+    # this will return nonsense - which is good. If someone is using
+    # read_badpractice with an unclear file type, they should have to specify
+    filetype = '.'.join(filename.split('.')[1:])
     if filetype == '':
         raise ValueError('S3 path must contain an extension designating '
                          'a valid file type. If you are reading a file, '
@@ -64,10 +67,6 @@ def clean_bucket(bucket):
     Returns:
         str: The cleaned S3 bucket name
     """
-    # if '.' in bucket:
-    #     raise ValueError('Period characters (\'.\') are not permitted '
-    #                      'by river. Use \'river.read_badpractice_file\' '
-    #                      'if reading such a file is necessary.')
     prefix = 's3://'
     if bucket.startswith(prefix):
         bucket = bucket[len(prefix):]

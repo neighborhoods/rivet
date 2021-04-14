@@ -72,6 +72,51 @@ csv = {
 
 ##############################################################################
 
+#######
+# PSV #
+#######
+
+
+def _read_psv(tmpfile, *args, **kwargs):
+    """
+    Reads a DataFrame from a PSV.
+    Wrapper around _write_csv with different 'sep' character.
+
+    Args:
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be read from
+    Returns:
+        pd.DataFrame: The DataFrame read from PSV
+    """
+    return _read_csv(tmpfile, sep='|', *args, **kwargs)
+
+
+def _write_psv(obj, tmpfile, *args, **kwargs):
+    """
+    Saves a DataFrame to a PSV with modifiable default values.
+    Wrapper around _write_csv with different 'sep' character.
+
+    Args:
+        obj (pd.DataFrame): The DataFrame to be written to PSV
+        tmpfile (tempfile.NamedTemporaryFile):
+            Connection to the file to be written to
+        index (bool, default=False): Whether to include the DataFrame index
+            in the PSV, used to establish default behavior.
+            Can be overridden in args/kwargs.
+
+    Raises:
+        TypeError: if 'obj' is not a DataFrame
+    """
+    _write_csv(obj, tmpfile, sep='|', *args, **kwargs)
+
+
+psv = {
+    'read': _read_psv,
+    'write': _write_psv
+}
+
+##############################################################################
+
 ##########
 # Pickle #
 ##########
@@ -314,16 +359,18 @@ feather = {
 
 ##############################################################################
 
-# TODO
-#######
-# ORC #
-#######
-
-##############################################################################
-
 format_fn_map = {
    'avro': avro,
    'csv': csv,
+   'csv.gz': csv,
+   'csv.zip': csv,
+   'csv.bz2': csv,
+   'csv.xz': csv,
+   'psv': psv,
+   'psv.gz': psv,
+   'psv.zip': psv,
+   'psv.bz2': psv,
+   'psv.xz': psv,
    'feather': feather,
    'json': json,
    'pickle': pkl,
