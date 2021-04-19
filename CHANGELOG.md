@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for reading textfiles (optionally compressed) in chunks - may add
 support for doing the same with Avro files in the future
 - Tests for reading/writing compressed textfiles
+- Tests for reading files in chunks
 
 ### Changed
 - Updated old docstrings
