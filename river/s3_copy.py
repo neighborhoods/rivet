@@ -13,14 +13,11 @@ def copy(source_path,
     Copy an object from one S3 location into another.
 
     Args:
-        source_filename (str): Filename of file to copy
-        source_folder (str): Folder of file to copy
+        source_path (str): Path of file to copy
+        dest_path (str): Path to copy file to
         source_bucket (str): Bucket of file to copy
-        dest_filename (str): Filename to copy to.
-            Will be set to 'source_filename' if not provided
-        dest_folder (str): Folder to copy to
         dest_bucket (str): Bucket to copy to
-        show_progresbar (bool, default True): Whether to show a progress bar
+        show_progressbar (bool, default True): Whether to show a progress bar
     """
     source_bucket = source_bucket or s3_path_utils.get_default_bucket()
     dest_bucket = dest_bucket or s3_path_utils.get_default_bucket()
