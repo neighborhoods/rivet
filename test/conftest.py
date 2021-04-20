@@ -46,6 +46,15 @@ def test_df_keys():
     return {
         'avro': ['df.avro'],
         'csv': ['df.csv'],
+        'csv.gz': ['df.csv.gz'],
+        'csv.zip': ['df.csv.zip'],
+        'csv.bz2': ['df.csv.bz2'],
+        'csv.xz': ['df.csv.xz'],
+        'psv': ['df.psv'],
+        'psv.gz': ['df.psv.gz'],
+        'psv.zip': ['df.psv.zip'],
+        'psv.bz2': ['df.psv.bz2'],
+        'psv.xz': ['df.psv.xz'],
         'feather': ['df.feather'],
         'json': ['df.json'],
         'pkl': ['df.pkl', 'df.pickle'],
@@ -114,6 +123,51 @@ def setup_bucket_w_dfs(mock_s3_client, test_bucket, test_df, test_df_keys):
     for key in test_df_keys['csv']:
         with NamedTemporaryFile() as tmpfile:
             test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['csv.gz']:
+        with NamedTemporaryFile(suffix='.csv.gz') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['csv.zip']:
+        with NamedTemporaryFile(suffix='.csv.zip') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['csv.bz2']:
+        with NamedTemporaryFile(suffix='.csv.bz2') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['csv.xz']:
+        with NamedTemporaryFile(suffix='.csv.xz') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False)
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['psv']:
+        with NamedTemporaryFile() as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False, sep='|')
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['psv.gz']:
+        with NamedTemporaryFile(suffix='.psv.gz') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False, sep='|')
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['psv.zip']:
+        with NamedTemporaryFile(suffix='.psv.zip') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False, sep='|')
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['psv.bz2']:
+        with NamedTemporaryFile(suffix='.psv.bz2') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False, sep='|')
+            s3.upload_file(tmpfile.name, test_bucket, key)
+
+    for key in test_df_keys['psv.xz']:
+        with NamedTemporaryFile(suffix='.psv.xz') as tmpfile:
+            test_df.to_csv(tmpfile.name, index=False, sep='|')
             s3.upload_file(tmpfile.name, test_bucket, key)
 
     for key in test_df_keys['feather']:

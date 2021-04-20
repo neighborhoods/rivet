@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] 2021-04-19
+
+### Added
+- Added support for reading textfiles (optionally compressed) in chunks
+- Tests for reading/writing compressed textfiles
+- Tests for reading files in chunks
+
+### Changed
+- Updated old docstrings
+- Fixed bug where attempting to read/write to/from an extensionless S3 path
+would throw an irrelevant exception (claiming that period characters are
+not allowed in S3 paths outside of file extensions)
+
 ## [1.4.0] 2021-04-05
 
 ### Added

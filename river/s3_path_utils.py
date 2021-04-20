@@ -32,10 +32,10 @@ def clean_folder(folder):
 
 def clean_path(path):
     """
-    Creates and cleans an S3 path based on a provided folder and filename.
+    Ensures that a provided S3 path follows the convention enforced by river
 
     Args:
-        folder (str): The folder portion of a full S3 path
+        path (str): The S3 path being cleaned
         filename (str): The filename portion of a full S3 path
     Returns:
         str: The full, cleaned S3 path
@@ -50,7 +50,7 @@ def clean_path(path):
     if re.search(r'\.\.', path):
         raise ValueError('Double-dots (\'..\') are not permitted by river.')
 
-    if path.find('.') < path.rfind('/'):
+    if (path.find('.') < path.rfind('/')) and (path.find('.') != -1):
         raise ValueError('Period characters (\'.\') are not permitted '
                          ' by river except in file extensions.')
     return path

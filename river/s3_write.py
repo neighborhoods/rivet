@@ -16,7 +16,7 @@ def write(obj, path, bucket=None,
 
     Args:
         obj (object): The object to be uploaded to S3
-        filename (str): The path to save obj to
+        path (str): The path to save obj to
         bucket (str, optional): The S3 bucket to save 'obj' in
         show_progresbar (bool, default True): Whether to show a progress bar
     Returns:
