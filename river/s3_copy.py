@@ -8,7 +8,8 @@ def copy(source_path,
          dest_path,
          source_bucket=None,
          dest_bucket=None,
-         show_progressbar=True):
+         show_progressbar=True,
+         clean_source_path=True):
     """
     Copy an object from one S3 location into another.
 
@@ -22,7 +23,8 @@ def copy(source_path,
     source_bucket = source_bucket or s3_path_utils.get_default_bucket()
     dest_bucket = dest_bucket or s3_path_utils.get_default_bucket()
 
-    source_path = s3_path_utils.clean_path(source_path)
+    if clean_source_path:
+        source_path = s3_path_utils.clean_path(source_path)
     dest_path = s3_path_utils.clean_path(dest_path)
 
     s3 = boto3.client('s3')
