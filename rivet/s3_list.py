@@ -3,7 +3,7 @@ import re
 
 import boto3
 
-from river import s3_path_utils
+from rivet import s3_path_utils
 
 
 def list_objects(path='',

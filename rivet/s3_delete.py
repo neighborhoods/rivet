@@ -2,8 +2,8 @@ import logging
 
 import boto3
 
-from river import s3_path_utils
-from river.s3_list import list_objects
+from rivet import s3_path_utils
+from rivet.s3_list import list_objects
 
 
 def delete(path, bucket=None, recursive=False):

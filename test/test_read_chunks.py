@@ -1,4 +1,4 @@
-from river import read_df_in_chunks
+from rivet import read_df_in_chunks
 
 
 uncompressed_formats = [

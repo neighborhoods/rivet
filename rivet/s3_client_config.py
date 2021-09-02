@@ -1,5 +1,5 @@
-from river import get_option
-from river.s3_progressbar import S3ProgressBar
+from rivet import get_option
+from rivet.s3_progressbar import S3ProgressBar
 
 
 def get_s3_client_kwargs(path, bucket, operation,

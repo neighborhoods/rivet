@@ -32,7 +32,7 @@ def clean_folder(folder):
 
 def clean_path(path):
     """
-    Ensures that a provided S3 path follows the convention enforced by river
+    Ensures that a provided S3 path follows the convention enforced by rivet
 
     Args:
         path (str): The S3 path being cleaned
@@ -40,19 +40,19 @@ def clean_path(path):
     Returns:
         str: The full, cleaned S3 path
     Raises:
-        ValueError: If 'path' violates river's S3 path conventions
+        ValueError: If 'path' violates rivet's S3 path conventions
     """
     if '//' in path:
         raise ValueError('Double-forward slashes (\'//\') are not permitted '
-                         'by river. Use \'river.read_badpractice_file\' '
+                         'by rivet. Use \'rivet.read_badpractice_file\' '
                          'if reading such a file is necessary.')
 
     if re.search(r'\.\.', path):
-        raise ValueError('Double-dots (\'..\') are not permitted by river.')
+        raise ValueError('Double-dots (\'..\') are not permitted by rivet.')
 
     if (path.find('.') < path.rfind('/')) and (path.find('.') != -1):
         raise ValueError('Period characters (\'.\') are not permitted '
-                         ' by river except in file extensions.')
+                         ' by rivet except in file extensions.')
     return path
 
 

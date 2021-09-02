@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile
 import boto3
 import pandas as pd
 
-from river import write
+from rivet import write
 
 
 def test_write_csv(setup_bucket_wo_contents, test_bucket,
