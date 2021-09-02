@@ -3,9 +3,9 @@ from tempfile import NamedTemporaryFile
 
 import boto3
 
-from river import inform, s3_path_utils
-from river.s3_client_config import get_s3_client_kwargs
-from river.storage_formats import get_storage_fn
+from rivet import inform, s3_path_utils
+from rivet.s3_client_config import get_s3_client_kwargs
+from rivet.storage_formats import get_storage_fn
 
 
 def read(path, bucket=None, show_progressbar=True,
@@ -122,7 +122,7 @@ def read_badpractice(path, bucket=None, filetype=None, show_progressbar=True,
     Returns:
         object: The object downloaded from S3
     """
-    logging.warning('You are using river\'s read function that allows for '
+    logging.warning('You are using rivet\'s read function that allows for '
                     'files stored with inadvisible S3 paths. It is highly '
                     'recommended that you use the standard \'read\' '
                     'function to ensure that good naming practices are '

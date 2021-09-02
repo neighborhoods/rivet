@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 import boto3
 import pandas as pd
 
-from river import copy
+from rivet import copy
 
 
 def test_copy(setup_bucket_w_dfs, test_bucket, test_df_keys):

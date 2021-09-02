@@ -1,4 +1,4 @@
-from river import list_objects, exists
+from rivet import list_objects, exists
 
 
 def test_list_objects_w_objects(setup_bucket_w_contents,

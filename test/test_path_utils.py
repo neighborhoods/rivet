@@ -1,6 +1,6 @@
 import pytest
 
-from river.s3_path_utils import get_filetype, clean_path
+from rivet.s3_path_utils import get_filetype, clean_path
 
 
 def test_refuses_no_filetype():

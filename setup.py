@@ -10,7 +10,7 @@ from setuptools import setup, find_packages, Command
 here = os.path.abspath(os.path.dirname(__file__))
 
 about = {}
-with open(os.path.join(here, 'river', '_version.py'), 'r') as f:
+with open(os.path.join(here, 'rivet', '_version.py'), 'r') as f:
     exec(f.read(), about)
 
 with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
@@ -48,9 +48,7 @@ class UploadCommand(Command):
                   sys.executable))
 
         self.status('Uploading the package to PyPI via Twine…')
-        returned_error = os.system(
-            'twine upload dist/* '
-            '--repository-url http://pypi.neighborhoods.com/simple/')
+        returned_error = os.system('twine upload dist/* ')
         if returned_error:
             raise ValueError('Pushing to PyPi failed.')
 
@@ -87,7 +85,7 @@ setup(
         'boto3>=1.10.0',
         'pandas>=0.25.3',
         'pandavro>=1.6',
-        'pyarrow>=2.0.0'
+        'pyarrow>=3.0.0'
     ],
     cmdclass={
         'upload': UploadCommand,

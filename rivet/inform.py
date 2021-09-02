@@ -1,4 +1,4 @@
-from river import get_option
+from rivet import get_option
 
 
 def inform(msg):

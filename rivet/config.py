@@ -6,7 +6,7 @@ _options = {
 def set_option(opt, val):
     valid_options = _options.keys()
     if opt not in valid_options:
-        raise ValueError('\'{}\' is not a valid river option .')
+        raise ValueError('\'{}\' is not a valid rivet option .')
     else:
         _options[opt] = val
 

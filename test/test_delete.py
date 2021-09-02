@@ -1,6 +1,6 @@
 import pytest
 
-from river import delete, list_objects
+from rivet import delete, list_objects
 
 
 def test_delete(setup_bucket_w_contents, test_bucket, test_keys):

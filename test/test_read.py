@@ -1,4 +1,4 @@
-from river import read
+from rivet import read
 
 
 def test_read_csv(setup_bucket_w_dfs, test_bucket, test_df, test_df_keys):
