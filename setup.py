@@ -82,7 +82,7 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
-        'boto3>=1.13.0',
+        'boto3>=1.10.0',
         'pandas>=0.25.3',
         'pandavro>=1.6',
         'pyarrow>=3.0.0'
